@@ -7,18 +7,27 @@ var Sample = require('./sample');
 var UniformSample = module.exports = function UniformSample(size) {
   this.limit = size;
   this.count = 0;
+  this.init();
 }
 
-utils.mixin(Sample, UniformSample);
+UniformSample.prototype = new Sample();
 
 UniformSample.prototype.update = function(val) {
-  console.log("got here: " + val);
+  this.count++;
   if (this.size() < this.limit) {
+    //console.log("Adding "+val+" to values.");
     this.values.push(val);
   } else {
     var rand = Math.random();
-    if (rand < 1/this.limit) {
-      this.values[Math.floor(rand*count)] = val;
+    if (rand < this.limit/this.count) {
+      //console.log(rand+"*"+this.limit+"="+rand*this.limit);
+      this.values[Math.floor(Math.random()*this.limit)] = val;
+      //console.log("Adding "+val+" to values.");
     }
+    /* 
+    else {
+      console.log("Not adding to values this time.");
+    }
+    */
   }
 }

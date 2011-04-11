@@ -1,5 +1,14 @@
 var UniformSample = require('../stats/uniform_sample');
-
-var uniform_sample = new UniformSample(5000);
-console.dir(uniform_sample);
-uniform_sample.update(6);
+console.log("\nCreating a new UniformSample with a limit of 600.");
+var uniform_sample = new UniformSample(600);
+console.log("Sending 10000 updates to the UniformSample.")
+for (var i = 0; i<10000; i++) {
+  uniform_sample.update(i);
+}
+var sum = 0;
+for (var k in uniform_sample.values) {
+  sum += uniform_sample.values[k];
+}
+var mean = sum / uniform_sample.values.length;
+console.log("\nAverage of Sample: "+mean);
+console.log("Average of 'real data': 5000\n");
