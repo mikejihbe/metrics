@@ -1,4 +1,5 @@
-require 'sample'
+var utils = require('../lib/utils');
+var Sample = require('./sample');
 
 /*
 *  Take a uniform sample of size size for all values
@@ -8,9 +9,10 @@ var UniformSample = module.exports = function UniformSample(size) {
   this.count = 0;
 }
 
-UniformSample.prototype = new Sample();
+utils.mixin(Sample, UniformSample);
 
 UniformSample.prototype.update = function(val) {
+  console.log("got here: " + val);
   if (this.size() < this.limit) {
     this.values.push(val);
   } else {

@@ -1,4 +1,4 @@
-require('sample');
+require('./sample');
 
 /*
 *  Exponentially weighted moving average.
