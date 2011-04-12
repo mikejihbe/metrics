@@ -1,5 +1,5 @@
 var Sample = require('./sample')
-  , BinaryHeap = require('../lib/binary_heap.js');
+  , BinaryHeap = require('../lib/binary_heap');
 
 /*
 *  Take a uniform sample of size size for all values
@@ -12,7 +12,7 @@ var ExponentiallyDecayingSample = module.exports = function ExponentiallyDecayin
   this.alpha = alpha;
   this.startTime = 0;
   this.nextScaleTime = 0;
-  this.values = new BinaryHeap(function(obj){return obj.priority;});
+  this.values = this.newHeap();
 }
 
 ExponentiallyDecayingSample.prototype = new Sample();
@@ -26,15 +26,15 @@ ExponentiallyDecayingSample.prototype.now = function() {
 }
 
 ExponentiallyDecayingSample.prototype.clear = function() {
-  this.values = [];
+  this.values = this.newHeap();
   this.count = 0;
-  this.startTime = self.now();
-  this.nextScaleTime = self.now() + RESCALE_THRESHOLD;
+  this.startTime = this.now();
+  this.nextScaleTime = this.now() + RESCALE_THRESHOLD;
 }
 
 ExponentiallyDecayingSample.prototype.update = function(val, timestamp) {
   if (timestamp == undefined) {
-    timestamp = self.now();
+    timestamp = this.now();
   }
   var priority = this.weight(timestamp - this.startTime) / Math.random()
     , value = {val: val, priority: priority};
@@ -45,6 +45,8 @@ ExponentiallyDecayingSample.prototype.update = function(val, timestamp) {
     var first = this.values.peek();
     if (first.priority < priority) {
       this.values.push(value);
+      console.log(first);
+      console.log(this.values);
       while(this.values.remove(first) == null) {
         first = this.values.peek();
       }
@@ -57,8 +59,8 @@ ExponentiallyDecayingSample.prototype.update = function(val, timestamp) {
 }
 
 
-ExponentiallyDecayingSample.prototype.weight = function(timestamp) {
-  return Math.exp(this.alpha * timestamp);
+ExponentiallyDecayingSample.prototype.weight = function(time) {
+  return Math.exp(this.alpha * time);
 }
 
 ExponentiallyDecayingSample.prototype.rescale = function(now, next) {
@@ -67,6 +69,7 @@ ExponentiallyDecayingSample.prototype.rescale = function(now, next) {
     , elt
     , oldStartTime = this.startTime;
   this.startTime = self.now();
+  // TODO: make this not pop them all, just iterate through them
   while(elt = this.values.pop()) {
     newValues.push({val: elt.val, priority: elt.priority * Math.exp(-this.alpha * (this.startTime - oldStartTime))});
   }
