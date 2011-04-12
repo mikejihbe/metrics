@@ -1,5 +1,3 @@
-require('./sample');
-
 /*
 *  Exponentially weighted moving average.
 *  Args: 
@@ -14,14 +12,16 @@ var M15_ALPHA = 1 - Math.exp(-5/60/15);
 var ExponentiallyWeightedMovingAverage = EWMA = module.exports = function ExponentiallyWeightedMovingAverage(alpha, interval) {
   var self = this;
   this.alpha = alpha;
-  this.interval = interval;
+  this.interval = interval || 1000;
   this.initialized = false;
-  this.rate = 0.0;
+  this.currentRate = 0.0;
   this.uncounted = 0;
-  this.tickInterval = setInterval(function(){ self.tick(); }, interval);
+  if (interval) {
+    this.tickInterval = setInterval(function(){ self.tick(); }, interval);
+  }
 }
 
-ExponentiallyWeightedMovingAverage.prototype.update = function(val) {
+ExponentiallyWeightedMovingAverage.prototype.update = function() {
   this.uncounted += 1;
 }
 
@@ -33,9 +33,9 @@ ExponentiallyWeightedMovingAverage.prototype.tick = function() {
   this.uncounted = 0;
   
   if(this.initialized) {
-    this.rate += this.alpha * (instantRate - this.rate);
+    this.currentRate += this.alpha * (instantRate - this.currentRate);
   } else {
-    this.rate = instantRate;
+    this.currentRate = instantRate;
     this.initialized = true;
   }
 }
@@ -44,7 +44,7 @@ ExponentiallyWeightedMovingAverage.prototype.tick = function() {
 * Return the rate per second
 */
 ExponentiallyWeightedMovingAverage.prototype.rate = function() {
-  return this.rate * 1000;
+  return this.currentRate * 1000;
 }
 
 
