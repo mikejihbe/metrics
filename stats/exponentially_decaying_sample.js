@@ -25,17 +25,22 @@ ExponentiallyDecayingSample.prototype.now = function() {
   return (new Date()).getTime();
 }
 
+ExponentiallyDecayingSample.prototype.tick = function() {
+  return this.now() / 1000;
+}
+
 ExponentiallyDecayingSample.prototype.clear = function() {
   this.values = this.newHeap();
   this.count = 0;
-  this.startTime = this.now();
+  this.startTime = this.tick();
   this.nextScaleTime = this.now() + RESCALE_THRESHOLD;
 }
 
 ExponentiallyDecayingSample.prototype.update = function(val, timestamp) {
   if (timestamp == undefined) {
-    timestamp = this.now();
+    timestamp = this.tick();
   }
+  console.log("VAL : " + val + " diff: " + (timestamp -this.startTime) + " exp: " + (this.alpha * (timestamp - this.startTime)));
   var priority = this.weight(timestamp - this.startTime) / Math.random()
     , value = {val: val, priority: priority};
   if (this.count < this.limit) {
@@ -68,7 +73,7 @@ ExponentiallyDecayingSample.prototype.rescale = function(now, next) {
   var newValues = this.newHeap() 
     , elt
     , oldStartTime = this.startTime;
-  this.startTime = self.now();
+  this.startTime = self.tick();
   // TODO: make this not pop them all, just iterate through them
   while(elt = this.values.pop()) {
     newValues.push({val: elt.val, priority: elt.priority * Math.exp(-this.alpha * (this.startTime - oldStartTime))});
