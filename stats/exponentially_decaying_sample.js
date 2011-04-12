@@ -2,8 +2,8 @@ var Sample = require('./sample')
   , BinaryHeap = require('../lib/binary_heap');
 
 /*
-*  Take a uniform sample of size size for all values
-*/
+ *  Take a uniform sample of size size for all values
+ */
 var RESCALE_THRESHOLD = 60 * 60 * 1000; // 1 hour in milliseconds
 
 var ExponentiallyDecayingSample = module.exports = function ExponentiallyDecayingSample(size, alpha) {
@@ -63,7 +63,6 @@ ExponentiallyDecayingSample.prototype.update = function(val, timestamp) {
   }
 }
 
-
 ExponentiallyDecayingSample.prototype.weight = function(time) {
   return Math.exp(this.alpha * time);
 }
@@ -80,4 +79,3 @@ ExponentiallyDecayingSample.prototype.rescale = function(now, next) {
   }
   this.values = newValues;
 }
-
