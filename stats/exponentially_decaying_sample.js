@@ -1,5 +1,6 @@
 var Sample = require('./sample')
   , BinaryHeap = require('../lib/binary_heap')
+  , util = require('util')
   , utils = require('../lib/utils');
 
 /*
@@ -21,8 +22,7 @@ ExponentiallyDecayingSample.prototype = new Sample();
 // This is a relatively expensive operation
 ExponentiallyDecayingSample.prototype.getValues = function() {
   var values = []
-    , heap = utils.cloneObject(this.values);
-
+    , heap = this.values.clone();
   while(elt = heap.pop()) {
     values.push(elt);
   }
@@ -62,8 +62,7 @@ ExponentiallyDecayingSample.prototype.update = function(val, timestamp) {
   } else {
     timestamp = timestamp / 1000;
   }
-  //console.log("VAL : " + val + " diff: " + (timestamp - this.startTime) + " exp: " + (this.alpha * (timestamp - this.startTime)));
-  var priority = this.weight(timestamp - this.startTime) /// Math.random()
+  var priority = this.weight(timestamp - this.startTime) / Math.random()
     , value = {val: val, priority: priority};
   if (this.count < this.limit) {
     this.count += 1;
@@ -72,8 +71,6 @@ ExponentiallyDecayingSample.prototype.update = function(val, timestamp) {
     var first = this.values.peek();
     if (first.priority < priority) {
       this.values.push(value);
-      /*console.log(first);
-      console.log(this.values);*/
       while(this.values.remove(first) == null) {
         first = this.values.peek();
       }
@@ -89,15 +86,17 @@ ExponentiallyDecayingSample.prototype.weight = function(time) {
   return Math.exp(this.alpha * time);
 }
 
-ExponentiallyDecayingSample.prototype.rescale = function(now, next) {
-  this.nextScaleTime = now + RESCALE_THRESHOLD;
-  var newValues = this.newHeap() 
+// now: parameter primarily used for testing rescales
+ExponentiallyDecayingSample.prototype.rescale = function(now) {
+  this.nextScaleTime = this.now() + RESCALE_THRESHOLD;
+  var oldContent = this.values.content
+    , newContent = []
     , elt
     , oldStartTime = this.startTime;
-  this.startTime = self.tick();
-  // TODO: make this not pop them all, just iterate through them
-  while(elt = this.values.pop()) {
-    newValues.push({val: elt.val, priority: elt.priority * Math.exp(-this.alpha * (this.startTime - oldStartTime))});
+  this.startTime = (now && now / 1000) || this.tick();
+  // Downscale every priority by the same factor. Order is unaffected, which is why we're avoiding the cost of popping.
+  for(var i = 0; i < oldContent.length; i++) {
+    newContent.push({val: oldContent[i].val, priority: oldContent[i].priority * Math.exp(-this.alpha * (this.startTime - oldStartTime))});
   }
-  this.values = newValues;
+  this.values.content = newContent;
 }
