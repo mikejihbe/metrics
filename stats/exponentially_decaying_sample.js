@@ -86,16 +86,18 @@ ExponentiallyDecayingSample.prototype.weight = function(time) {
   return Math.exp(this.alpha * time);
 }
 
-ExponentiallyDecayingSample.prototype.rescale = function(now, next) {
-  this.nextScaleTime = now + RESCALE_THRESHOLD;
-  var newValues = this.newHeap() 
+// now: parameter primarily used for testing rescales
+ExponentiallyDecayingSample.prototype.rescale = function(now) {
+  this.nextScaleTime = this.now() + RESCALE_THRESHOLD;
+  var oldContent = this.values.content
+    , newContent = []
     , elt
     , oldStartTime = this.startTime;
-  this.startTime = self.tick();
-  // TODO: make this not pop them all, just iterate through them
-  while(elt = this.values.pop()) {
-    newValues.push({val: elt.val, priority: elt.priority * Math.exp(-this.alpha * (this.startTime - oldStartTime))});
+  this.startTime = (now && now / 1000) || this.tick();
+  // Downscale every priority by the same factor. Order is unaffected, which is why we're avoiding the cost of popping.
+  for(var i = 0; i < oldContent.length; i++) {
+    newContent.push({val: oldContent[i].val, priority: oldContent[i].priority * Math.exp(-this.alpha * (this.startTime - oldStartTime))});
   }
-  this.values = newValues;
+  this.values.content = newContent;
 }
 

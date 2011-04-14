@@ -11,15 +11,24 @@ for(var i = 0; i < 100; i++) {
   }
 }
 
-var valueCounts = {}
-  , values = eds.getValues();
-
-for(var i = 0; i < eds.size(); i++) {
-  if (valueCounts[values[i].val]) {
-    valueCounts[values[i].val]++;
-  } else {
-    valueCounts[values[i].val] = 1;
+function printSample(eds) {
+  var valueCounts = {}
+    , values = eds.getValues();
+  
+  for(var i = 0; i < eds.size(); i++) {
+    if (valueCounts[values[i].val]) {
+      valueCounts[values[i].val]++;
+    } else {
+      valueCounts[values[i].val] = 1;
+    }
   }
+  return valueCounts;
 }
 
-console.log(valueCounts);
+console.log("This is an exponential distribution:");
+console.log(printSample(eds));
+
+eds.rescale(time + 100*interval);
+
+console.log("This is after rescaling");
+console.log(eds.getValues());
