@@ -1,5 +1,6 @@
 var Sample = require('./sample')
   , BinaryHeap = require('../lib/binary_heap')
+  , util = require('util')
   , utils = require('../lib/utils');
 
 /*
@@ -21,8 +22,7 @@ ExponentiallyDecayingSample.prototype = new Sample();
 // This is a relatively expensive operation
 ExponentiallyDecayingSample.prototype.getValues = function() {
   var values = []
-    , heap = utils.cloneObject(this.values);
-
+    , heap = this.values.clone();
   while(elt = heap.pop()) {
     values.push(elt);
   }
@@ -62,8 +62,7 @@ ExponentiallyDecayingSample.prototype.update = function(val, timestamp) {
   } else {
     timestamp = timestamp / 1000;
   }
-  //console.log("VAL : " + val + " diff: " + (timestamp - this.startTime) + " exp: " + (this.alpha * (timestamp - this.startTime)));
-  var priority = this.weight(timestamp - this.startTime) /// Math.random()
+  var priority = this.weight(timestamp - this.startTime) / Math.random()
     , value = {val: val, priority: priority};
   if (this.count < this.limit) {
     this.count += 1;
@@ -72,8 +71,6 @@ ExponentiallyDecayingSample.prototype.update = function(val, timestamp) {
     var first = this.values.peek();
     if (first.priority < priority) {
       this.values.push(value);
-      /*console.log(first);
-      console.log(this.values);*/
       while(this.values.remove(first) == null) {
         first = this.values.peek();
       }
