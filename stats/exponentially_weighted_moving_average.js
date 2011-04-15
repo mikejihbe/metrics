@@ -12,7 +12,7 @@ var M15_ALPHA = 1 - Math.exp(-5/60/15);
 var ExponentiallyWeightedMovingAverage = EWMA = module.exports = function ExponentiallyWeightedMovingAverage(alpha, interval) {
   var self = this;
   this.alpha = alpha;
-  this.interval = interval || 1000;
+  this.interval = interval || 5000;
   this.initialized = false;
   this.currentRate = 0.0;
   this.uncounted = 0;
@@ -21,8 +21,8 @@ var ExponentiallyWeightedMovingAverage = EWMA = module.exports = function Expone
   }
 }
 
-ExponentiallyWeightedMovingAverage.prototype.update = function() {
-  this.uncounted += 1;
+ExponentiallyWeightedMovingAverage.prototype.update = function(n) {
+  this.uncounted += (n || 1);
 }
 
 /*
@@ -47,6 +47,6 @@ ExponentiallyWeightedMovingAverage.prototype.rate = function() {
   return this.currentRate * 1000;
 }
 
-exports.createM1EWMA = function(){ return new EWMA(M1_ALPHA, 60000); }
-exports.createM5EWMA = function(){ return new EWMA(M5_ALPHA, 5 * 60000); }
-exports.createM15EWMA = function(){ return new EWMA(M15_ALPHA, 15 * 60000); }
+module.exports.createM1EWMA = function(){ return new EWMA(M1_ALPHA, 5000); }
+module.exports.createM5EWMA = function(){ return new EWMA(M5_ALPHA, 5000); }
+module.exports.createM15EWMA = function(){ return new EWMA(M15_ALPHA, 5000); }

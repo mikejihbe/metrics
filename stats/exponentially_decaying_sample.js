@@ -4,17 +4,14 @@ var Sample = require('./sample')
   , utils = require('../lib/utils');
 
 /*
- *  Take a uniform sample of size size for all values
+ *  Take an exponentially decaying sample of size size of all values
  */
 var RESCALE_THRESHOLD = 60 * 60 * 1000; // 1 hour in milliseconds
 
 var ExponentiallyDecayingSample = module.exports = function ExponentiallyDecayingSample(size, alpha) {
-  this.count = 0;
   this.limit = size;
   this.alpha = alpha;
-  this.startTime = 0;
-  this.nextScaleTime = 0;
-  this.values = this.newHeap();
+  this.clear();
 }
 
 ExponentiallyDecayingSample.prototype = new Sample();
@@ -24,7 +21,7 @@ ExponentiallyDecayingSample.prototype.getValues = function() {
   var values = []
     , heap = this.values.clone();
   while(elt = heap.pop()) {
-    values.push(elt);
+    values.push(elt.val);
   }
   return values;
 }
@@ -71,9 +68,7 @@ ExponentiallyDecayingSample.prototype.update = function(val, timestamp) {
     var first = this.values.peek();
     if (first.priority < priority) {
       this.values.push(value);
-      while(this.values.remove(first) == null) {
-        first = this.values.peek();
-      }
+      this.values.pop();
     }
   }
 

@@ -18,4 +18,7 @@ compose(
   require('./test_exponentially_weighted_moving_average')
 , require('./test_exponentially_decaying_sample')
 , require('./test_uniform_sample')
+, require('./meter')
+, require('./histogram')
+, require('./timer')
 )();

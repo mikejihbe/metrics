@@ -33,7 +33,7 @@ Meter.prototype.fifteenMinuteRate = function() {
 }
 
 Meter.prototype.fiveMinuteRate = function() {
-  return this.m15Rate.rate();
+  return this.m5Rate.rate();
 }
 
 Meter.prototype.oneMinuteRate = function() {
@@ -41,7 +41,7 @@ Meter.prototype.oneMinuteRate = function() {
 }
 
 Meter.prototype.meanRate = function() {
-  return this.count / ((new Date).getTime() - this.startTime) / 1000;
+  return this.count / ((new Date).getTime() - this.startTime) * 1000;
 }
 
 Meter.prototype.printObj = function() {
@@ -53,3 +53,8 @@ Meter.prototype.printObj = function() {
       , unit: 'seconds'};
 }
 
+Meter.prototype.tick = function(){
+  this.m1Rate.tick();
+  this.m5Rate.tick();
+  this.m15Rate.tick();
+}
