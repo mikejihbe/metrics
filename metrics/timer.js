@@ -32,7 +32,7 @@ Timer.prototype.fiveMinuteRate = function() { this.meter.fiveMinuteRate(); }
 Timer.prototype.fifteenMinuteRate = function() { this.meter.fifteenMinuteRate(); }
 Timer.prototype.meanRate = function() { this.meter.meanRate(); }
 
-Counter.prototype.printObj = function() {
+Timer.prototype.printObj = function() {
   return {duration: this.histogram.printObj()
       , rate: this.meter.printObj()};
 }

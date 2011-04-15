@@ -44,7 +44,7 @@ Meter.prototype.meanRate = function() {
   return this.count / ((new Date).getTime() - this.startTime) / 1000;
 }
 
-Counter.prototype.printObj = function() {
+Meter.prototype.printObj = function() {
   return {count: this.count
       , m1: this.oneMinuteRate()
       , m5: this.fiveMinuteRate()

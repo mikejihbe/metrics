@@ -17,7 +17,7 @@ var Histogram = module.exports = function Histogram(sample) {
   this.type = 'histogram';
 }
 
-Counter.prototype.clear = function() {
+Histogram.prototype.clear = function() {
   this.sample.clear();
   this.min = null;
   this.max = null;
@@ -26,7 +26,7 @@ Counter.prototype.clear = function() {
   varianceS = 0;
 }
 
-Counter.prototype.update = function(val) {
+Histogram.prototype.update = function(val) {
   this.count++;
   this.sample.update(val);
   this.max = val > (this.max || Number.MIN_VALUE) ? val : this.max;
@@ -35,7 +35,7 @@ Counter.prototype.update = function(val) {
   this.updateVariance(val);
 }
 
-Counter.prototype.updateVariance(val) {
+Histogram.prototype.updateVariance = function(val) {
   var oldVM = this.varianceM
     , oldVS = this.varianceS;
   if (this.count == 1) {
@@ -47,7 +47,7 @@ Counter.prototype.updateVariance(val) {
 }
 
 // Pass an array of percentiles, e.g. [0.5, 0.75, 0.9, 0.99]
-Counter.prototype.percentiles = function(percentiles) {
+Histogram.prototype.percentiles = function(percentiles) {
   if (!percentiles) {
     percentiles = DEFAULT_PERCENTILES;
   }
@@ -71,23 +71,23 @@ Counter.prototype.percentiles = function(percentiles) {
   return scores;
 }
 
-Counter.prototype.variance = function() {
+Histogram.prototype.variance = function() {
   return this.count > 1 ? null : this.varianceS / (this.count - 1);
 }
 
-Counter.prototype.mean = function() {
+Histogram.prototype.mean = function() {
   return this.count == 0 ? null : this.varianceM;
 }
 
-Counter.prototype.stdDev = function() {
+Histogram.prototype.stdDev = function() {
   return this.count > 1 ? null : Math.sqrt(this.variance());
 }
 
-Counter.prototype.values = function() {
+Histogram.prototype.values = function() {
   return this.sample.getValues();
 }
 
-Counter.prototype.toJson = function() {
+Histogram.prototype.toJson = function() {
   var percentiles = this.percentiles();
   return {min: this.min,
       max: this.max,
