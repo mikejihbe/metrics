@@ -8,6 +8,7 @@ var Meter = module.exports = function Meter() {
   this.m15Rate = EWMA.createM15EWMA();
   this.count = 0;
   this.startTime = (new Date).getTime();
+  this.type = 'meter';
 }
 
 // Mark the occurence of n events
@@ -41,5 +42,14 @@ Meter.prototype.oneMinuteRate = function() {
 
 Meter.prototype.meanRate = function() {
   return this.count / ((new Date).getTime() - this.startTime) / 1000;
+}
+
+Counter.prototype.printObj = function() {
+  return {count: this.count
+      , m1: this.oneMinuteRate()
+      , m5: this.fiveMinuteRate()
+      , m15: this.fifteenMinuteRate()
+      , mean: this.meanRate()
+      , unit: 'seconds'};
 }
 

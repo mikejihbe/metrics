@@ -3,6 +3,7 @@
 */
 var Counter = module.exports = function Counter() {
   this.count = 0;
+  this.type = 'counter';
 }
 
 Counter.prototype.inc = function(val) {
@@ -21,4 +22,8 @@ Counter.prototype.count = function() {
 
 Counter.prototype.clear = function() {
   this.count = 0;
+}
+
+Counter.prototype.printObj = function() {
+  return {count: this.count};
 }

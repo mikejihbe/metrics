@@ -14,6 +14,7 @@ var Histogram = module.exports = function Histogram(sample) {
   this.varianceM = null;
   this.varianceS = null;
   this.count = 0;
+  this.type = 'histogram';
 }
 
 Counter.prototype.clear = function() {
@@ -86,4 +87,15 @@ Counter.prototype.values = function() {
   return this.sample.getValues();
 }
 
+Counter.prototype.toJson = function() {
+  var percentiles = this.percentiles();
+  return {min: this.min,
+      max: this.max,
+      sum: this.sum,
+      variance: this.variance(),
+      mean: this.mean(),
+      std_dev: this.stdDev(),
+      count: this.count,
+      percentiles: percentiles};
+}
 

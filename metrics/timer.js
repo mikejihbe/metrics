@@ -8,6 +8,7 @@ var Timer = module.exports = function Timer() {
   this.meter = new Meter();
   this.histogram = new Histogram(new ExponentiallyDecayingSample(1028, 0.015));
   this.clear();
+  this.type = 'timer';
 }
 
 Timer.prototype.update = function(duration) { 
@@ -31,4 +32,8 @@ Timer.prototype.fiveMinuteRate = function() { this.meter.fiveMinuteRate(); }
 Timer.prototype.fifteenMinuteRate = function() { this.meter.fifteenMinuteRate(); }
 Timer.prototype.meanRate = function() { this.meter.meanRate(); }
 
+Counter.prototype.printObj = function() {
+  return {duration: this.histogram.printObj()
+      , rate: this.meter.printObj()};
+}
 
