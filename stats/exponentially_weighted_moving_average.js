@@ -46,3 +46,7 @@ ExponentiallyWeightedMovingAverage.prototype.tick = function() {
 ExponentiallyWeightedMovingAverage.prototype.rate = function() {
   return this.currentRate * 1000;
 }
+
+exports.createM1EWMA = function(){ return new EWMA(M1_ALPHA, 60000); }
+exports.createM5EWMA = function(){ return new EWMA(M5_ALPHA, 5 * 60000); }
+exports.createM15EWMA = function(){ return new EWMA(M15_ALPHA, 15 * 60000); }
