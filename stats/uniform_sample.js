@@ -2,8 +2,8 @@ var utils = require('../lib/utils');
 var Sample = require('./sample');
 
 /*
-*  Take a uniform sample of size size for all values
-*/
+ *  Take a uniform sample of size size for all values
+ */
 var UniformSample = module.exports = function UniformSample(size) {
   this.limit = size;
   this.count = 0;

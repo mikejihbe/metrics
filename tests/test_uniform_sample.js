@@ -14,7 +14,7 @@ var test = function(callback){
   var mean = sum / uniform_sample.values.length;
   console.log("\nAverage of Sample: "+mean);
   console.log("Average of 'real data': 5000\n");
-  if (typeof callback != 'undefined') {
+  if (typeof callback == 'function') {
     callback();
   }
 }

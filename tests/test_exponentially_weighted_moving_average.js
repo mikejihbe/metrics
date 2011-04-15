@@ -18,7 +18,7 @@ var test = function (callback) {
     clearInterval(updateInterval);
     console.log("\n\nExpected Average: 10");
     console.log("Exponentially Weighted Moving Average: "+exponentially_weighted_moving_average.rate()+"\n");
-    if (typeof callback != 'undefined') {
+    if (typeof callback == 'function') {
       callback();
     }
   }, 30000);

@@ -4,8 +4,8 @@ var Sample = require('./sample')
   , utils = require('../lib/utils');
 
 /*
-*  Take a uniform sample of size size for all values
-*/
+ *  Take a uniform sample of size size for all values
+ */
 var RESCALE_THRESHOLD = 60 * 60 * 1000; // 1 hour in milliseconds
 
 var ExponentiallyDecayingSample = module.exports = function ExponentiallyDecayingSample(size, alpha) {
@@ -100,4 +100,3 @@ ExponentiallyDecayingSample.prototype.rescale = function(now) {
   }
   this.values.content = newContent;
 }
-
