@@ -7,7 +7,7 @@ var DEFAULT_PERCENTILES = [0.001, 0.01, 0.05, 0.1, 0.25, 0.5, 0.75, 0.9, 0.95, 0
 * 
 */
 var Histogram = module.exports = function Histogram(sample) {
-  this.sample = sample;
+  this.sample = sample || new EDS(1028, 0.015);
   this.min = null;
   this.max = null;
   this.sum = null;
@@ -90,7 +90,7 @@ Histogram.prototype.values = function() {
   return this.sample.getValues();
 }
 
-Histogram.prototype.toJson = function() {
+Histogram.prototype.printObj = function() {
   var percentiles = this.percentiles();
   return {min: this.min,
       max: this.max,

@@ -1,5 +1,5 @@
 var Meter = require('./meter');
-Histogram = require('./Histogram')
+Histogram = require('./histogram')
 ExponentiallyDecayingSample = require('../stats/exponentially_decaying_sample');
 /*
 *  

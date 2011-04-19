@@ -4,18 +4,27 @@ var http = require('http');
 * This server will print the object upon request.  The user should update the metrics
 * as normal within their application.
 */
-var MetricsServer = module.exports = function MetricsServer(port, trackedMetrics) {
-  http.createServer(function (req, res) {
-    if (req.url.match(/^metrics/i)) {
-      res.writeHead(200, {'Content-Type': 'text/json'});
+var Server = module.exports = function Server(port, trackedMetrics) {
+  var self = this;
+  this.trackedMetrics = trackedMetrics || {};
+  this.server = http.createServer(function (req, res) {
+    if (req.url.match(/^\/metrics/)) {
+      res.writeHead(200, {'Content-Type': 'application/json'});
       var metricsObj = {};
-      for (part in trackedMetrics) {
-        metricsObj[part] = trackeMetrics[part].printObj();
+      for (part in self.trackedMetrics) {
+        metricsObj[part] = self.trackedMetrics[part].printObj();
       }
       res.end(JSON.stringify(metricsObj));
     } else {
       res.writeHead(404, {'Content-Type': 'text/plain'});
       res.end('Try hitting /metrics instead');
-    }}).listen(8124, "127.0.0.1");
+    }
+  }).listen(port, "127.0.0.1");
+}
+
+Server.prototype.addMetric = function(eventName, metric) {
+  if (!this.trackedMetrics[eventName]) {
+    this.trackedMetrics[eventName] = metric;
+  }
 }
 
