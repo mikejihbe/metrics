@@ -18,16 +18,9 @@ UniformSample.prototype.update = function(val) {
     //console.log("Adding "+val+" to values.");
     this.values.push(val);
   } else {
-    var rand = Math.random();
-    if (rand < this.limit/this.count) {
-      //console.log(rand+"*"+this.limit+"="+rand*this.limit);
-      this.values[Math.floor(Math.random()*this.limit)] = val;
-      //console.log("Adding "+val+" to values.");
+    var rand = parseInt(Math.random() * this.count);
+    if (rand < this.limit) {
+      this.values[rand] = val;
     }
-    /* 
-    else {
-      console.log("Not adding to values this time.");
-    }
-    */
   }
 }
