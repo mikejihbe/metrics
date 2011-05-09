@@ -21,10 +21,20 @@ metricsServer = new metrics.Server(config.metricsPort || 9091);
 **Create some metrics**
 
 ```javascript
+  // Counters count things. They implement inc, dec, clear
 var counterForThingA = new metrics.Counter
-  , histForThingB = new metrics.Histogram
-  , meterForThingC = new metrics.Meter
-  , timerForThingD = new metrics.Timer;
+  // Histograms collect a sample's distribution. They're highly configurable,
+  // so check out the actual implementation if the defaults don't fit your needs
+  // (but they probably will).  This is useful for tracking how long things take
+  // for instance.  Exponential decay histograms favor more recent data, which
+  // is typically what you want
+  , histForThingB = new metrics.createExponentialDecayHistogram()
+  , histForThingC = new metrics.createUniformHistogram()
+  // A meter tracks how often things happen. It exposes a 1 minute rate, a 5 minute rate, and a 15 minute rate
+  // using exponentially weighted moving averages (the same strategy that unix load average takes)
+  , meterForThingD = new metrics.Meter
+  // A Timer is a combination of a meter and a histogram.  Everything you could possibly want!
+  , timerForThingE = new metrics.Timer;
 ```
 
 **Add the metrics to the server**
@@ -52,9 +62,9 @@ Metric.prototype.newMetric = function(type, eventType) {
     method: 'createMetric'
     , type: type
     , eventType: eventType
-  }); 
+  });
 }
-Metric.prototype.forwardMessage = function(method, args) { 
+Metric.prototype.forwardMessage = function(method, args) {
   this.messagePasser.sendMessage({
     method: 'updateMetric'
     , metricMethod: method
@@ -70,7 +80,7 @@ Metric.prototype.dec = function(n) { return this.forwardMessage('dec', [n]); }
 Metric.prototype.clear = function() { return this.forwardMessage('clear'); }
 ```
 
-And the server side that implements createMetric and updateMetric could look something like this:
+And the server side that receives the createMetric and updateMetric rpcs could look something like this:
 
 ```javascript
 {
@@ -91,7 +101,9 @@ And the server side that implements createMetric and updateMetric could look som
 }
 ```
 
+For multiple server deployments, you have more options, but the best approach will be highly application dependent. Best of luck, and always be tracking!
+
 How to Collect
 --------------
 
-Hit the server on your configured port and you'll get a json representation of your metrics.  You should collect these periodically to generate timeseries and monitor the health of your application.
+Hit the server on your configured port and you'll get a json representation of your metrics.  You should collect these periodically to generate timeseries to monitor the health of your application.
