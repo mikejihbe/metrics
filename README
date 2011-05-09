@@ -1,5 +1,0 @@
-A node.js port of codahale's metrics library: https://github.com/codahale/metrics, still in its early stages
-
-TODO: 
-
---write a test for histogram streaming variance
