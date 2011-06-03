@@ -25,5 +25,5 @@ Counter.prototype.clear = function() {
 }
 
 Counter.prototype.printObj = function() {
-  return {count: this.count};
+  return {type: 'counter', count: this.count};
 }

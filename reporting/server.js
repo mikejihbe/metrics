@@ -11,8 +11,11 @@ var Server = module.exports = function Server(port, trackedMetrics) {
     if (req.url.match(/^\/metrics/)) {
       res.writeHead(200, {'Content-Type': 'application/json'});
       var metricsObj = {};
-      for (part in self.trackedMetrics) {
-        metricsObj[part] = self.trackedMetrics[part].printObj();
+      for (namespace in self.trackedMetrics) {
+        metricsObj[namespace] = {};
+        for (event in self.trackedMetrics[namespace]) {
+          metricsObj[namespace][event] = self.trackedMetrics[namespace][event].printObj();
+        }
       }
       res.end(JSON.stringify(metricsObj));
     } else {
@@ -23,8 +26,14 @@ var Server = module.exports = function Server(port, trackedMetrics) {
 }
 
 Server.prototype.addMetric = function(eventName, metric) {
-  if (!this.trackedMetrics[eventName]) {
-    this.trackedMetrics[eventName] = metric;
+  var namespaces = eventName.split('.')
+    , event = namespaces.pop()
+    , namespace = namespaces.join('.');
+  if (!this.trackedMetrics[namespace]) {
+    this.trackedMetrics[namespace] = {};
+  }
+  if(!this.trackedMetrics[namespace][event]) {
+    this.trackedMetrics[namespace][event] = metric;
   }
 }
 

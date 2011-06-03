@@ -40,10 +40,10 @@ var counterForThingA = new metrics.Counter
 **Add the metrics to the server**
 
 ```javascript
-metricsServer.addMetric('thingA', counterForThingA);
-metricsServer.addMetric('thingB', counterForThingB);
-metricsServer.addMetric('thingC', counterForThingC);
-metricsServer.addMetric('thingD', counterForThingD);
+metricsServer.addMetric('com.co.thingA', counterForThingA);
+metricsServer.addMetric('com.co.thingB', counterForThingB);
+metricsServer.addMetric('com.co.thingC', counterForThingC);
+metricsServer.addMetric('com.co.thingD', counterForThingD);
 ```
 
 

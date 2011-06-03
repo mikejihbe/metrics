@@ -2,7 +2,7 @@ var Meter = require('./meter');
 Histogram = require('./histogram')
 ExponentiallyDecayingSample = require('../stats/exponentially_decaying_sample');
 /*
-*  
+*  Basically a timer tracks the rate of events and histograms the durations
 */
 var Timer = module.exports = function Timer() {
   this.meter = new Meter();
@@ -11,7 +11,7 @@ var Timer = module.exports = function Timer() {
   this.type = 'timer';
 }
 
-Timer.prototype.update = function(duration) { 
+Timer.prototype.update = function(duration) {
   this.histogram.update(duration);
   this.meter.mark();
 }
@@ -34,7 +34,8 @@ Timer.prototype.meanRate = function() { return this.meter.meanRate(); }
 Timer.prototype.tick = function() { this.meter.tick(); } // primarily for testing
 
 Timer.prototype.printObj = function() {
-  return {duration: this.histogram.printObj()
+  return {type: 'timer'
+      , duration: this.histogram.printObj()
       , rate: this.meter.printObj()};
 }
 

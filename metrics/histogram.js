@@ -1,10 +1,10 @@
 var EDS = require('../stats/exponentially_decaying_sample')
   , UniformSample = require('../stats/uniform_sample');
 
-var DEFAULT_PERCENTILES = [0.001, 0.01, 0.05, 0.1, 0.25, 0.5, 0.75, 0.9, 0.95, 0.99, 0.999];
+var DEFAULT_PERCENTILES = [0.001, 0.01, 0.05, 0.1, 0.25, 0.5, 0.75, 0.9, 0.95, 0.98, 0.99, 0.999];
 
 /*
-* 
+* A histogram tracks the distribution of items, given a sample type 
 */
 var Histogram = module.exports = function Histogram(sample) {
   this.sample = sample || new EDS(1028, 0.015);
@@ -92,14 +92,20 @@ Histogram.prototype.values = function() {
 
 Histogram.prototype.printObj = function() {
   var percentiles = this.percentiles();
-  return {min: this.min,
-      max: this.max,
-      sum: this.sum,
-      variance: this.variance(),
-      mean: this.mean(),
-      std_dev: this.stdDev(),
-      count: this.count,
-      percentiles: percentiles};
+  return {
+      type: 'histogram'
+    , min: this.min
+    , max: this.max
+    , sum: this.sum
+    , variance: this.variance()
+    , mean: this.mean()
+    , std_dev: this.stdDev()
+    , count: this.count
+    , median: percentiles[0.5]
+    , p75: percentiles[0.75]
+    , p95: percentiles[0.95]
+    , p99: percentiles[0.99]
+    , p999: percentiles[0.999]};
 }
 
 module.exports.createExponentialDecayHistogram = function(size, alpha) { return new Histogram(new EDS((size || 1028), (alpha || 0.015))); };
