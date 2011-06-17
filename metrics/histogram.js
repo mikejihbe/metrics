@@ -32,8 +32,16 @@ Histogram.prototype.clear = function() {
 Histogram.prototype.update = function(val, timestamp) {
   this.count++;
   this.sample.update(val, timestamp);
-  this.max = val > (this.max || Number.MIN_VALUE) ? val : this.max;
-  this.min = val < (this.min || Number.MAX_VALUE) ? val : this.min;
+  if (this.max === null) {
+    this.max = val;
+  } else {
+    this.max = val > this.max ? val : this.max;
+  }
+  if (this.min === null) {
+    this.min = val;
+  } else {
+    this.min = val < this.min ? val : this.min;
+  }
   this.sum += val;
   this.updateVariance(val);
 }
