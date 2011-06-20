@@ -42,7 +42,7 @@ Histogram.prototype.update = function(val, timestamp) {
   } else {
     this.min = val < this.min ? val : this.min;
   }
-  this.sum += val;
+  this.sum = (this.sum === null) ? val : this.sum + val;
   this.updateVariance(val);
 }
 
