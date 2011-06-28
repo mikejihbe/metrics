@@ -23,9 +23,10 @@ Histogram.prototype.clear = function() {
   this.sample.clear();
   this.min = null;
   this.max = null;
-  this.sum = 0;
-  this.varianceM = -1;
-  this.varianceS = 0;
+  this.sum = null;
+  this.varianceM = null;
+  this.varianceS = null;
+  this.count = 0;
 }
 
 // timestamp param primarily used for testing
