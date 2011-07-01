@@ -23,18 +23,27 @@ Histogram.prototype.clear = function() {
   this.sample.clear();
   this.min = null;
   this.max = null;
-  this.sum = 0;
-  this.varianceM = -1;
-  this.varianceS = 0;
+  this.sum = null;
+  this.varianceM = null;
+  this.varianceS = null;
+  this.count = 0;
 }
 
 // timestamp param primarily used for testing
 Histogram.prototype.update = function(val, timestamp) {
   this.count++;
   this.sample.update(val, timestamp);
-  this.max = val > (this.max || Number.MIN_VALUE) ? val : this.max;
-  this.min = val < (this.min || Number.MAX_VALUE) ? val : this.min;
-  this.sum += val;
+  if (this.max === null) {
+    this.max = val;
+  } else {
+    this.max = val > this.max ? val : this.max;
+  }
+  if (this.min === null) {
+    this.min = val;
+  } else {
+    this.min = val < this.min ? val : this.min;
+  }
+  this.sum = (this.sum === null) ? val : this.sum + val;
   this.updateVariance(val);
 }
 
