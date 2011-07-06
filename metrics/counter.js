@@ -14,17 +14,19 @@ var Counter = module.exports = function Counter() {
 
 Counter.prototype.inc = function(val) {
   if (!val) { val = 1; }
-  if (this.count === MAX_COUNTER_VALUE) {
-    this.count = 0;
-  } else {
-    this.count += val;
+  this.count += val;
+  // Wrap counter if necessary.
+  if (this.count > MAX_COUNTER_VALUE) {
+    this.count -= MAX_COUNTER_VALUE;
   }
 }
 
 Counter.prototype.dec = function(val) {
   if (!val) { val = 1; }
-  if (this.count > 0) {
-    this.count -= val;
+  this.count -= val;
+  // Prevent counter from being decremented below zero.
+  if (this.count < 0) {
+    this.count = 0;
   }
 }
 
