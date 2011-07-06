@@ -16,10 +16,6 @@ Counter.prototype.dec = function(val) {
   this.count -= val;
 }
 
-Counter.prototype.count = function() {
-  return this.count;
-}
-
 Counter.prototype.clear = function() {
   this.count = 0;
 }
