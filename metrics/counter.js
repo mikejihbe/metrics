@@ -17,7 +17,7 @@ Counter.prototype.inc = function(val) {
   this.count += val;
   // Wrap counter if necessary.
   if (this.count > MAX_COUNTER_VALUE) {
-    this.count -= MAX_COUNTER_VALUE;
+    this.count -= (MAX_COUNTER_VALUE + 1);
   }
 }
 
