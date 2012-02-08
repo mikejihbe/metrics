@@ -5,6 +5,57 @@ Metrics
 
 Metrics provides an instrumentation toolkit to measure the behavior of your critical systems while they're running in production.
 
+Instruments
+----------
+
+**Counters**
+
+Counters count things.
+They implement: inc, dec, clear
+They expose: count
+
+```javascript
+var counter = new metrics.Counter
+counter.inc(1)
+counter.inc(3)
+counter.dec(2)
+counter.count // 2
+counter.clear()
+counter.count // 0
+```
+
+**Histograms**
+Histograms sample a dataset to get a sense of its distribution.  These are particularly useful for breaking down the quantiles of how longs things take (requests, method calls, etc). Metrics supports uniform distributions and exponentially decaying samples.  Sample sizes and parameters of the distribution are all highly configurable, but the defaults will probably suit your needs. Exponential decay histograms favor more recent data, which is typically what you want
+They implement: update, mean, stdDev, percentiles, clear
+They expose: count, min, max, sum
+
+```javascript
+var hist1 = new metrics.createExponentialDecayHistogram()
+  , hist2 = new metrics.createUniformHistogram()
+```
+
+**Meter**
+
+A meter tracks how often things happen. It exposes a 1 minute rate, a 5 minute rate, and a 15 minute rate using exponentially weighted moving averages (the same strategy that unix load average takes).
+They implement: mark, oneMinuteRate, fiveMinuteRate, fifteenMinuteRate, meanRate
+
+```javascript
+var meter = new metrics.Meter
+meter.mark
+meter.mark
+meter.mark
+meter.meanRate()
+```
+
+**Timer**
+
+A Timer is a combination of a meter and a histogram. It samples timing data and rate the data is coming in.  Everything you could possibly want! 
+They implement: update, mark, clear, count, min, max, mean, stdDev, percentiles, oneMinuteRate, fiveMinuteRate, fifteenMinuteRate, meanRate
+
+```javascript
+var  timer = new metrics.Timer;
+```
+
 How to Use
 ----------
 
@@ -22,35 +73,14 @@ var metricsServer = new metrics.Server(config.metricsPort || 9091);
 
 Servers are only one way to report your metrics.  It's actually a thin layer on top of metrics.Report, which you could use to build other reporting mechanisms.
 
-**Create some metrics**
-
-```javascript
-  // Counters count things. They implement: inc, dec, clear
-var counterForThingA = new metrics.Counter
-  // Histograms collect a sample's distribution. They're highly configurable,
-  // so check out the actual implementation if the defaults don't fit your needs
-  // (but they probably will).  This is useful for breaking down quantiles of how long things take
-  // for instance.  Exponential decay histograms favor more recent data, which
-  // is typically what you want.
-  // They implement: update
-  , histForThingB = new metrics.createExponentialDecayHistogram()
-  , histForThingC = new metrics.createUniformHistogram()
-  // A meter tracks how often things happen. It exposes a 1 minute rate, a 5 minute rate, and a 15 minute rate
-  // using exponentially weighted moving averages (the same strategy that unix load average takes).
-  // They implement: mark
-  , meterForThingD = new metrics.Meter
-  // A Timer is a combination of a meter and a histogram. It samples timing data and rates of requests.  Everything you could possibly want!
-  // They implement: update
-  , timerForThingE = new metrics.Timer;
-```
-
 **Add the metrics to the server**
 
 ```javascript
-metricsServer.addMetric('com.co.thingA', counterForThingA);
-metricsServer.addMetric('com.co.thingB', counterForThingB);
-metricsServer.addMetric('com.co.thingC', counterForThingC);
-metricsServer.addMetric('com.co.thingD', counterForThingD);
+metricsServer.addMetric('com.co.thingA', counter);
+metricsServer.addMetric('com.co.thingB', hist1);
+metricsServer.addMetric('com.co.thingC', hist2);
+metricsServer.addMetric('com.co.thingD', meter);
+metricsServer.addMetric('com.co.thingE', timer);
 ```
 
 
