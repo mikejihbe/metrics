@@ -11,7 +11,9 @@ Instruments
 **Counters**
 
 Counters count things.
+
 They implement: inc, dec, clear
+
 They expose: count
 
 ```javascript
@@ -25,8 +27,11 @@ counter.count // 0
 ```
 
 **Histograms**
+
 Histograms sample a dataset to get a sense of its distribution.  These are particularly useful for breaking down the quantiles of how longs things take (requests, method calls, etc). Metrics supports uniform distributions and exponentially decaying samples.  Sample sizes and parameters of the distribution are all highly configurable, but the defaults will probably suit your needs. Exponential decay histograms favor more recent data, which is typically what you want
+
 They implement: update, mean, stdDev, percentiles, clear
+
 They expose: count, min, max, sum
 
 ```javascript
@@ -37,6 +42,7 @@ var hist1 = new metrics.createExponentialDecayHistogram()
 **Meter**
 
 A meter tracks how often things happen. It exposes a 1 minute rate, a 5 minute rate, and a 15 minute rate using exponentially weighted moving averages (the same strategy that unix load average takes).
+
 They implement: mark, oneMinuteRate, fiveMinuteRate, fifteenMinuteRate, meanRate
 
 ```javascript
@@ -50,6 +56,7 @@ meter.meanRate()
 **Timer**
 
 A Timer is a combination of a meter and a histogram. It samples timing data and rate the data is coming in.  Everything you could possibly want! 
+
 They implement: update, mark, clear, count, min, max, mean, stdDev, percentiles, oneMinuteRate, fiveMinuteRate, fifteenMinuteRate, meanRate
 
 ```javascript
