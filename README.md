@@ -3,37 +3,44 @@ Metrics
 
 * A node.js port of codahale's metrics library: https://github.com/codahale/metrics
 
+Metrics provides an instrumentation toolkit to measure the behavior of your critical systems while they're running in production.
+
 How to Use
 ----------
 
 **Import Metrics**
 
 ```javascript
-metrics = require('./../deps/metrics')
+metrics = require('metrics')
 ```
 
 **Start a metrics Server**
 
 ```javascript
-metricsServer = new metrics.Server(config.metricsPort || 9091);
+var metricsServer = new metrics.Server(config.metricsPort || 9091);
 ```
+
+Servers are only one way to report your metrics.  It's actually a thin layer on top of metrics.Report, which you could use to build other reporting mechanisms.
 
 **Create some metrics**
 
 ```javascript
-  // Counters count things. They implement inc, dec, clear
+  // Counters count things. They implement: inc, dec, clear
 var counterForThingA = new metrics.Counter
   // Histograms collect a sample's distribution. They're highly configurable,
   // so check out the actual implementation if the defaults don't fit your needs
-  // (but they probably will).  This is useful for tracking how long things take
+  // (but they probably will).  This is useful for breaking down quantiles of how long things take
   // for instance.  Exponential decay histograms favor more recent data, which
-  // is typically what you want
+  // is typically what you want.
+  // They implement: update
   , histForThingB = new metrics.createExponentialDecayHistogram()
   , histForThingC = new metrics.createUniformHistogram()
   // A meter tracks how often things happen. It exposes a 1 minute rate, a 5 minute rate, and a 15 minute rate
-  // using exponentially weighted moving averages (the same strategy that unix load average takes)
+  // using exponentially weighted moving averages (the same strategy that unix load average takes).
+  // They implement: mark
   , meterForThingD = new metrics.Meter
-  // A Timer is a combination of a meter and a histogram.  Everything you could possibly want!
+  // A Timer is a combination of a meter and a histogram. It samples timing data and rates of requests.  Everything you could possibly want!
+  // They implement: update
   , timerForThingE = new metrics.Timer;
 ```
 
@@ -106,4 +113,4 @@ For multiple server deployments, you have more options, but the best approach wi
 How to Collect
 --------------
 
-Hit the server on your configured port and you'll get a json representation of your metrics.  You should collect these periodically to generate timeseries to monitor the health of your application.
+Using the metrics server you can hit the server on your configured port and you'll get a json representation of your metrics.  You should collect these periodically to generate timeseries to monitor the longterm health of your application.  The metrics.Reporting object would let you write to a log periodically or however else you'd like to expose your metrics.
