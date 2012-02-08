@@ -36,7 +36,10 @@ They expose: count, min, max, sum
 
 ```javascript
 var hist1 = new metrics.createExponentialDecayHistogram()
-  , hist2 = new metrics.createUniformHistogram()
+  , hist2 = new metrics.createUniformHistogram();
+  hist2.update(1);
+  hist2.update(3);
+  hist2.mean(); // 2
 ```
 
 **Meter**
@@ -47,10 +50,10 @@ They implement: mark, oneMinuteRate, fiveMinuteRate, fifteenMinuteRate, meanRate
 
 ```javascript
 var meter = new metrics.Meter
-meter.mark
-meter.mark
-meter.mark
-meter.meanRate()
+meter.mark();
+meter.mark();
+meter.mark();
+meter.meanRate(); // depends on how fast you called mark()
 ```
 
 **Timer**
@@ -61,6 +64,7 @@ They implement: update, mark, clear, count, min, max, mean, stdDev, percentiles,
 
 ```javascript
 var  timer = new metrics.Timer;
+timer.update(1);
 ```
 
 How to Use
@@ -69,7 +73,7 @@ How to Use
 **Import Metrics**
 
 ```javascript
-metrics = require('metrics')
+metrics = require('metrics');
 ```
 
 **Start a metrics Server**
