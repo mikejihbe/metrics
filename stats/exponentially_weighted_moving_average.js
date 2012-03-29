@@ -19,6 +19,8 @@ var ExponentiallyWeightedMovingAverage = EWMA = module.exports = function Expone
   if (interval) {
     this.tickInterval = setInterval(function(){ self.tick(); }, interval);
   }
+  // need to stop things that hold the event loop open
+  process.on('_metrics:stop_all', this.stop.bind(this));
 }
 
 ExponentiallyWeightedMovingAverage.prototype.update = function(n) {
@@ -45,6 +47,10 @@ ExponentiallyWeightedMovingAverage.prototype.tick = function() {
  */
 ExponentiallyWeightedMovingAverage.prototype.rate = function() {
   return this.currentRate * 1000;
+}
+
+ExponentiallyWeightedMovingAverage.prototype.stop = function() {
+  clearInterval(this.tickInterval);
 }
 
 module.exports.createM1EWMA = function(){ return new EWMA(M1_ALPHA, 5000); }
