@@ -18,7 +18,7 @@ var Server = module.exports = function Server(port, trackedMetrics) {
       res.writeHead(404, {'Content-Type': 'text/plain'});
       res.end('Try hitting /metrics instead');
     }
-  }).listen(port, "127.0.0.1");
+  }).listen(port);
 }
 
 /**
