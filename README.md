@@ -35,8 +35,8 @@ They implement: update, mean, stdDev, percentiles, clear
 They expose: count, min, max, sum
 
 ```javascript
-var hist1 = new metrics.createExponentialDecayHistogram()
-  , hist2 = new metrics.createUniformHistogram();
+var hist1 = new metrics.Histogram.createExponentialDecayHistogram()
+  , hist2 = new metrics.Histogram.createUniformHistogram();
   hist2.update(1);
   hist2.update(3);
   hist2.mean(); // 2
