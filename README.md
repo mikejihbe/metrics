@@ -29,10 +29,6 @@ They implement: inc, dec, clear
 They expose: count
 
 ```javascript
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "
-</copyright></year>```javascript
 var counter = new metrics.Counter
 counter.inc(1)
 counter.inc(3)
