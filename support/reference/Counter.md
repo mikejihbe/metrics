@@ -1,6 +1,8 @@
 Counter counts things.
 
-Counter exports: [`inc()`](#Counter.inc), [`dec()`](#Counter.dec), [`clear()`](#Counter.clear), and [`count`](#Counter.count).
+Counter implements: [`inc()`](#Counter.inc), [`dec()`](#Counter.dec), and [`clear()`](#Counter.clear)
+
+Counter exposes: [`count`](#Counter.count)
 
 ### Instantiate
 `Counter` is an exported constructor in `metrics`.
