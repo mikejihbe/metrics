@@ -1,6 +1,7 @@
-var Meter = require('./meter');
-Histogram = require('./histogram')
-ExponentiallyDecayingSample = require('../stats/exponentially_decaying_sample');
+var Meter = require('./meter'),
+    Histogram = require('./histogram'),
+    ExponentiallyDecayingSample = require('../stats/exponentially_decaying_sample');
+
 /*
 *  Basically a timer tracks the rate of events and histograms the durations
 */
