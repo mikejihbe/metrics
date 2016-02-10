@@ -1,4 +1,3 @@
-var utils = require('../lib/utils');
 var Sample = require('./sample');
 
 /*
