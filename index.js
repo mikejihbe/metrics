@@ -9,5 +9,10 @@ exports.Timer = Metrics.Timer;
 exports.Server = Reporting.Server;
 exports.Report = Reporting.Report;
 
-exports.version = '0.1.5';
+exports.ScheduledReporter = Reporting.ScheduledReporter;
+exports.ConsoleReporter = Reporting.ConsoleReporter;
+exports.CsvReporter = Reporting.CsvReporter;
+exports.GraphiteReporter = Reporting.GraphiteReporter;
+
+exports.version = '0.1.10';
 
