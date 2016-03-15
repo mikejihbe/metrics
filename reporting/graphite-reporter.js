@@ -3,6 +3,8 @@ var ScheduledReporter = require('./scheduled-reporter.js'),
   util = require('util'),
   Socket = require('net').Socket;
 
+var reconnecting = false;
+
 /**
  * A custom reporter that sends metrics to a graphite server on the carbon tcp interface.
  * @param {Report} registry report instance whose metrics to report on.
@@ -24,12 +26,16 @@ GraphiteReporter.prototype.start = function(intervalInMs) {
   var self = this;
   this.socket = new Socket();
   this.socket.on('error', function(exc) {
-    self.emit('log', 'warn', util.format('Lost connection to %s. Will reconnect in 10 seconds.', self.host), exc);
-    // Stop the reporter and try again in 1 second.
-    self.stop();
-    setTimeout(function() {
-      self.start(intervalInMs);
-    }, 10000);
+    if(!reconnecting) {
+      reconnecting = true;
+      self.emit('log', 'warn', util.format('Lost connection to %s. Will reconnect in 10 seconds.', self.host), exc);
+      // Stop the reporter and try again in 1 second.
+      self.stop();
+      setTimeout(function () {
+        reconnecting = false;
+        self.start(intervalInMs);
+      }, 10000);
+    }
   });
 
   self.emit('log', 'verbose', util.format("Connecting to graphite @ %s:%d", this.host, this.port));
@@ -45,6 +51,10 @@ GraphiteReporter.prototype.stop = function() {
 };
 
 GraphiteReporter.prototype.report = function() {
+  // Don't report while reconnecting.
+  if(reconnecting) {
+    return;
+  }
   var metrics = this.getMetrics();
   var self = this;
   var timestamp = (new Date).getTime() / 1000;
@@ -72,6 +82,9 @@ GraphiteReporter.prototype.report = function() {
 };
 
 GraphiteReporter.prototype.send = function(name, value, timestamp) {
+  if(reconnecting) {
+    return;
+  }
   this.socket.write(util.format('%s.%s %s %s\n', this.prefix, name, value,
     timestamp));
 };
