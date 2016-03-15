@@ -68,7 +68,7 @@ function printMeter(meter) {
   console.log('             count = %d', meter.count);
   console.log('         mean rate = %s events/%s', ff(meter.meanRate()), 'second');
   console.log('     1-minute rate = %s events/%s', ff(meter.oneMinuteRate()), 'second');
-  console.log('     1-minute rate = %s events/%s', ff(meter.fiveMinuteRate()), 'second');
+  console.log('     5-minute rate = %s events/%s', ff(meter.fiveMinuteRate()), 'second');
   console.log('    15-minute rate = %s events/%s', ff(meter.fifteenMinuteRate()), 'second');
 }
 
@@ -77,7 +77,7 @@ function printTimer(timer) {
   console.log('             count = %d', timer.count());
   console.log('         mean rate = %s events/%s', ff(timer.meanRate()), 'second');
   console.log('     1-minute rate = %s events/%s', ff(timer.oneMinuteRate()), 'second');
-  console.log('     1-minute rate = %s events/%s', ff(timer.fiveMinuteRate()), 'second');
+  console.log('     5-minute rate = %s events/%s', ff(timer.fiveMinuteRate()), 'second');
   console.log('    15-minute rate = %s events/%s', ff(timer.fifteenMinuteRate()), 'second');
 
   var percentiles = timer.percentiles([.50,.75,.95,.98,.99,.999]);
