@@ -44,6 +44,18 @@ metricsServer.addMetric('com.co.thingD', meter);
 metricsServer.addMetric('com.co.thingE', timer);
 ```
 
+**Setting up a Reporter**
+
+A reporting interface exists for reporting metrics on a recurring interval.  Reporters can be found in [reporting/](reporting).
+
+```javascript
+// Report to console every 1000ms.
+var report = new metrics.Report();
+report.addMetric('com.co.thingA', counter);
+var reporter = new metrics.ConsoleReporter(report);
+
+reporter.start(1000);
+```
 
 Advanced Usage
 --------------
