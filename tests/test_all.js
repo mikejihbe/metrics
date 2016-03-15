@@ -21,4 +21,8 @@ compose(
 , require('./meter')
 , require('./histogram')
 , require('./timer')
+, require('./test_scheduled_reporter')
+, require('./test_console_reporter')
+, require('./test_csv_reporter')
+, require('./test_graphite_reporter')
 )();
