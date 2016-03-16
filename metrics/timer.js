@@ -33,6 +33,7 @@ Timer.prototype.fiveMinuteRate = function() { return this.meter.fiveMinuteRate()
 Timer.prototype.fifteenMinuteRate = function() { return this.meter.fifteenMinuteRate(); }
 Timer.prototype.meanRate = function() { return this.meter.meanRate(); }
 Timer.prototype.tick = function() { this.meter.tick(); } // primarily for testing
+Timer.prototype.rates = function() { return this.meter.rates(); }
 
 Timer.prototype.printObj = function() {
   return {type: 'timer'
