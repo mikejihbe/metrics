@@ -1,6 +1,8 @@
 Metrics
 =======
 
+[![Build Status](https://travis-ci.org/mikejihbe/metrics.svg?branch=master)](https://travis-ci.org/mikejihbe/metrics)
+
 A node.js port of codahale's metrics library: https://github.com/codahale/metrics
 
 Metrics provides an instrumentation toolkit to measure the behavior of your critical systems while they're running in production.
