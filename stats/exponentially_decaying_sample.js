@@ -1,7 +1,5 @@
 var Sample = require('./sample')
-  , BinaryHeap = require('../lib/binary_heap')
-  , util = require('util')
-  , utils = require('../lib/utils');
+  , BinaryHeap = require('../lib/binary_heap');
 
 /*
  *  Take an exponentially decaying sample of size size of all values
