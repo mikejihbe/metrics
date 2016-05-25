@@ -19,6 +19,7 @@ ExponentiallyDecayingSample.prototype = new Sample();
 // This is a relatively expensive operation
 ExponentiallyDecayingSample.prototype.getValues = function() {
   var values = []
+    , elt
     , heap = this.values.clone();
   while(elt = heap.pop()) {
     values.push(elt.val);
@@ -86,7 +87,6 @@ ExponentiallyDecayingSample.prototype.rescale = function(now) {
   this.nextScaleTime = this.now() + RESCALE_THRESHOLD;
   var oldContent = this.values.content
     , newContent = []
-    , elt
     , oldStartTime = this.startTime;
   this.startTime = (now && now / 1000) || this.tick();
   // Downscale every priority by the same factor. Order is unaffected, which is why we're avoiding the cost of popping.
