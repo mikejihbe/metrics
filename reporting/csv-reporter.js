@@ -1,7 +1,9 @@
 'use strict';
 var ScheduledReporter = require('./scheduled-reporter.js'),
+  Histogram = require('../metrics').Histogram,
   util = require('util'),
-  fs = require('fs');
+  fs = require('fs'),
+  noop = function () {};
 
 /**
  * A custom reporter that will create a csv file for each metric that is appended to on the defined reporting interval.
@@ -35,6 +37,13 @@ CsvReporter.prototype.report = function() {
     if(timer.min() != null) {
       self.reportTimer.bind(self)(timer, timestamp);
     }
+  });
+
+  metrics.histograms.forEach(function(histogram) {
+    // Don't log histogram if its recorded no metrics.
+    if(histogram.min != null) {
+      self.reportHistogram.bind(self)(histogram, timestamp);
+    }
   })
 };
 
@@ -51,7 +60,7 @@ CsvReporter.prototype.write = function(timestamp, name, header, line, values) {
       // include header if file didn't previously exist
       data = util.format("t,%s\n%s", header, data);
     }
-    fs.appendFile(file, data);
+    fs.appendFile(file, data, {}, noop);
   });
 };
 
@@ -102,6 +111,27 @@ CsvReporter.prototype.reportTimer = function(timer, timestamp) {
       timer.fifteenMinuteRate(),
       'second',
       'millisecond'
+    ]);
+};
+
+CsvReporter.prototype.reportHistogram = function(histogram, timestamp) {
+  var write = this.write.bind(this);
+  var percentiles = histogram.percentiles([.50,.75,.95,.98,.99,.999]);
+
+  write(timestamp, histogram.name,
+    'count,max,mean,min,stddev,p50,p75,p95,p98,p99,p999',
+    '%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d', [
+      histogram.count,
+      histogram.max,
+      histogram.mean(),
+      histogram.min,
+      histogram.stdDev(),
+      percentiles[.50],
+      percentiles[.75],
+      percentiles[.95],
+      percentiles[.98],
+      percentiles[.99],
+      percentiles[.999]
     ]);
 };
 

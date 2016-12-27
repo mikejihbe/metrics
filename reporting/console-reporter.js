@@ -1,5 +1,6 @@
 'use strict';
 var ScheduledReporter = require('./scheduled-reporter.js'),
+  Histogram = require('../metrics').Histogram,
   util = require('util');
 
 /**
@@ -42,6 +43,17 @@ ConsoleReporter.prototype.report = function() {
     });
     console.log();
   }
+
+  if(metrics.histograms.length != 0) {
+    printWithBanner('Histograms');
+    metrics.histograms.forEach(function (histogram) {
+      // Don't log histogram if its recorded no metrics.
+      if(histogram.min != null) {
+        printHistogram(histogram);
+      }
+    });
+    console.log();
+  }
 };
 
 function printWithBanner(name) {
@@ -80,18 +92,32 @@ function printTimer(timer) {
   console.log('     5-minute rate = %s events/%s', ff(timer.fiveMinuteRate()), 'second');
   console.log('    15-minute rate = %s events/%s', ff(timer.fifteenMinuteRate()), 'second');
 
-  var percentiles = timer.percentiles([.50,.75,.95,.98,.99,.999]);
+  printHistogram(timer);
+}
 
-  console.log('               min = %s %s', ff(timer.min()), 'milliseconds');
-  console.log('               max = %s %s', ff(timer.max()), 'milliseconds');
-  console.log('              mean = %s %s', ff(timer.mean()), 'milliseconds');
-  console.log('            stddev = %s %s', ff(timer.stdDev()), 'milliseconds');
-  console.log('              50%% <= %s %s', ff(percentiles[.50]), 'milliseconds');
-  console.log('              75%% <= %s %s', ff(percentiles[.75]), 'milliseconds');
-  console.log('              95%% <= %s %s', ff(percentiles[.95]), 'milliseconds');
-  console.log('              98%% <= %s %s', ff(percentiles[.98]), 'milliseconds');
-  console.log('              99%% <= %s %s', ff(percentiles[.99]), 'milliseconds');
-  console.log('            99.9%% <= %s %s', ff(percentiles[.999]), 'milliseconds');
+function printHistogram(histogram) {
+  var isHisto = Object.getPrototypeOf(histogram) === Histogram.prototype;
+  if(isHisto) {
+    // log name and count if a histogram, otherwise assume this metric is being
+    // printed as part of another (like a timer).
+    console.log(histogram.name);
+    console.log('             count = %d', histogram.count);
+  }
+
+  var percentiles = histogram.percentiles([.50,.75,.95,.98,.99,.999]);
+  // assume timer if not a histogram, in which case we include durations.
+  var durationUnit = isHisto ? '' : ' milliseconds';
+
+  console.log('               min = %s%s', ff(isHisto ? histogram.min : histogram.min()), durationUnit);
+  console.log('               max = %s%s', ff(isHisto ? histogram.max : histogram.max()), durationUnit);
+  console.log('              mean = %s%s', ff(histogram.mean()), durationUnit);
+  console.log('            stddev = %s%s', ff(histogram.stdDev()), durationUnit);
+  console.log('              50%% <= %s%s', ff(percentiles[.50]), durationUnit);
+  console.log('              75%% <= %s%s', ff(percentiles[.75]), durationUnit);
+  console.log('              95%% <= %s%s', ff(percentiles[.95]), durationUnit);
+  console.log('              98%% <= %s%s', ff(percentiles[.98]), durationUnit);
+  console.log('              99%% <= %s%s', ff(percentiles[.99]), durationUnit);
+  console.log('            99.9%% <= %s%s', ff(percentiles[.999]), durationUnit);
 }
 
 module.exports = ConsoleReporter;

@@ -1,5 +1,6 @@
 'use strict';
 var ScheduledReporter = require('./scheduled-reporter.js'),
+  Histogram = require('../metrics').Histogram,
   util = require('util'),
   Socket = require('net').Socket;
 
@@ -79,6 +80,15 @@ GraphiteReporter.prototype.report = function() {
       }
     })
   }
+
+  if(metrics.histograms.length != 0) {
+    metrics.histograms.forEach(function (histogram) {
+      // Don't log histogram if its recorded no metrics.
+      if(histogram.min != null) {
+        self.reportHistogram.bind(self)(histogram, timestamp);
+      }
+    })
+  }
 };
 
 GraphiteReporter.prototype.send = function(name, value, timestamp) {
@@ -119,17 +129,30 @@ GraphiteReporter.prototype.reportTimer = function(timer, timestamp) {
   send(util.format('%s.%s', timer.name, 'm15_rate'), timer.fifteenMinuteRate(),
     timestamp);
 
-  var percentiles = timer.percentiles([.50,.75,.95,.98,.99,.999]);
-  send(util.format('%s.%s', timer.name, 'min'), timer.min(), timestamp);
-  send(util.format('%s.%s', timer.name, 'mean'), timer.mean(), timestamp);
-  send(util.format('%s.%s', timer.name, 'max'), timer.max(), timestamp);
-  send(util.format('%s.%s', timer.name, 'stddev'), timer.stdDev(), timestamp);
-  send(util.format('%s.%s', timer.name, 'p50'), percentiles[.50], timestamp);
-  send(util.format('%s.%s', timer.name, 'p75'), percentiles[.75], timestamp);
-  send(util.format('%s.%s', timer.name, 'p95'), percentiles[.95], timestamp);
-  send(util.format('%s.%s', timer.name, 'p98'), percentiles[.98], timestamp);
-  send(util.format('%s.%s', timer.name, 'p99'), percentiles[.99], timestamp);
-  send(util.format('%s.%s', timer.name, 'p999'), percentiles[.999], timestamp);
+  this.reportHistogram(timer, timestamp);
+};
+
+GraphiteReporter.prototype.reportHistogram = function(histogram, timestamp) {
+  var send = this.send.bind(this);
+
+  var isHisto = Object.getPrototypeOf(histogram) === Histogram.prototype;
+  if (isHisto) {
+    // send count if a histogram, otherwise assume this metric is being
+    // printed as part of another (like a timer).
+    send(util.format('%s.%s', histogram.name, 'count'), histogram.count, timestamp);
+  }
+
+  var percentiles = histogram.percentiles([.50,.75,.95,.98,.99,.999]);
+  send(util.format('%s.%s', histogram.name, 'min'), isHisto? histogram.min : histogram.min(), timestamp);
+  send(util.format('%s.%s', histogram.name, 'mean'), histogram.mean(), timestamp);
+  send(util.format('%s.%s', histogram.name, 'max'), isHisto ? histogram.max: histogram.max(), timestamp);
+  send(util.format('%s.%s', histogram.name, 'stddev'), histogram.stdDev(), timestamp);
+  send(util.format('%s.%s', histogram.name, 'p50'), percentiles[.50], timestamp);
+  send(util.format('%s.%s', histogram.name, 'p75'), percentiles[.75], timestamp);
+  send(util.format('%s.%s', histogram.name, 'p95'), percentiles[.95], timestamp);
+  send(util.format('%s.%s', histogram.name, 'p98'), percentiles[.98], timestamp);
+  send(util.format('%s.%s', histogram.name, 'p99'), percentiles[.99], timestamp);
+  send(util.format('%s.%s', histogram.name, 'p999'), percentiles[.999], timestamp);
 };
 
 module.exports = GraphiteReporter;
