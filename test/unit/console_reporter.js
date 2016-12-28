@@ -29,7 +29,7 @@ describe('ConsoleReporter', function () {
 
     // validate line by line.  This may be overkill but will detect when
     // unanticipated changes affect reported output.
-    expect(data.length).to.equal(30);
+    expect(data.length).to.equal(44);
     expect(data[0]).to.equal('Counters -----------------------------------------------------------------------');
     expect(data[1]).to.equal('basicCount');
     expect(data[2]).to.equal('             count = 5');
@@ -61,5 +61,19 @@ describe('ConsoleReporter', function () {
     expect(data[27]).to.equal('              99% <= 99.99 milliseconds');
     expect(data[28]).to.equal('            99.9% <= 100.00 milliseconds');
     expect(data[29]).to.equal('');
+    expect(data[30]).to.equal('Histograms ---------------------------------------------------------------------');
+    expect(data[31]).to.equal('myapp.Histogram');
+    expect(data[32]).to.equal('             count = 100');
+    expect(data[33]).to.equal('               min =  2.00');
+    expect(data[34]).to.equal('               max = 200.00');
+    expect(data[35]).to.equal('              mean = 101.00');
+    expect(data[36]).to.equal('            stddev = 58.02');
+    expect(data[37]).to.equal('              50% <= 101.00');
+    expect(data[38]).to.equal('              75% <= 151.50');
+    expect(data[39]).to.equal('              95% <= 191.90');
+    expect(data[40]).to.equal('              98% <= 197.96');
+    expect(data[41]).to.equal('              99% <= 199.98');
+    expect(data[42]).to.equal('            99.9% <= 200.00');
+    expect(data[43]).to.equal('');
   });
 });

@@ -66,7 +66,8 @@ describe('GraphiteReporter', function () {
             // Counter should have 1 value.
             // Meter should have 5 values.
             // Timer should have 15 values.
-            expect(tsData.length).to.equal(21);
+            // Histogram should have 11 values.
+            expect(tsData.length).to.equal(32);
             // Metric names should start with host name.
             tsData.forEach(function (metric) {
               expect(metric[0]).to.startsWith('host1.');

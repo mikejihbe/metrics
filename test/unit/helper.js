@@ -3,6 +3,7 @@ var metrics = require('../../'),
   Counter = metrics.Counter,
   Timer = metrics.Timer,
   Meter = metrics.Meter,
+  Histogram = metrics.Histogram,
   util = require('util');
 
 function getSampleReport() {
@@ -14,10 +15,15 @@ function getSampleReport() {
   }
   var meter = new Meter();
   meter.mark(10);
+  var hist = new Histogram();
+  for (var i = 1; i <= 100; i++) {
+    hist.update(i*2);
+  }
   var report = new Report();
   report.addMetric("basicCount", counter);
   report.addMetric("myapp.Meter", meter);
   report.addMetric("myapp.Timer", timer);
+  report.addMetric("myapp.Histogram", hist);
   return report;
 }
 
