@@ -11,13 +11,14 @@ var chai = require('chai')
   , util = require('util')
   , CsvReporter = require('../../').CsvReporter;
 
-describe('ScheduledReporter', function () {
+describe('CsvReporter', function () {
   this.timeout(5000);
   it('should append to files on interval.', function (done) {
     var tryCount = 0;
     var tmpdir;
     do {
-      tmpdir = os.tmpdir() + Math.random();
+      var r = 'csv_reporter_test_' + Math.floor((Math.random() * 65535) + 1024);
+      tmpdir = path.join(os.tmpdir(), r);
     } while(fs.existsSync(tmpdir) && tryCount++ < 10);
 
     if(fs.existsSync(tmpdir)) {
