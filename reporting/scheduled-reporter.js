@@ -1,5 +1,6 @@
 'use strict';
 var Counter = require('../metrics').Counter,
+  Histogram = require('../metrics').Histogram,
   Meter = require('../metrics').Meter,
   Timer = require('../metrics').Timer,
   util = require('util'),
@@ -45,13 +46,14 @@ ScheduledReporter.prototype.report = function() {
 
 /**
  * Retrieve the metrics associated with the report given to this reporter in a format that's easy to consume
- * by reporters.  That is an object with separate references for meters, timers and counters.
+ * by reporters.  That is an object with separate references for meters, timers counters, and histograms.
  * @returns {{meters: Array, timers: Array, counters: Array}}
  */
 ScheduledReporter.prototype.getMetrics = function() {
   var meters = [];
   var timers = [];
   var counters = [];
+  var histograms = [];
 
   var trackedMetrics = this.registry.trackedMetrics;
   // Flatten metric name to be namespace.name is has a namespace and separate out metrics
@@ -71,11 +73,13 @@ ScheduledReporter.prototype.getMetrics = function() {
         timers.push(metric);
       } else if(metricType == Counter.prototype) {
         counters.push(metric);
+      } else if(metricType == Histogram.prototype) {
+        histograms.push(metric);
       }
     }
   }
 
-  return { meters: meters, timers: timers, counters: counters };
+  return { meters: meters, timers: timers, counters: counters, histograms: histograms };
 };
 
 module.exports = ScheduledReporter;
