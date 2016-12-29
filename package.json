@@ -14,5 +14,13 @@
     "node": ">=0.10.x"
   },
   "dependencies": {},
-  "devDependencies": {}
+  "devDependencies": {
+    "mocha": "^2.4.5",
+    "chai": "^3.5.0",
+    "chai-string": "^1.3.0",
+    "debug": "^2.5.2"
+  },
+  "scripts": {
+    "test": "./node_modules/.bin/mocha test/unit"
+  }
 }

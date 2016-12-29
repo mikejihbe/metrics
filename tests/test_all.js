@@ -17,12 +17,4 @@ var compose = function() {
 compose(
   require('./test_exponentially_weighted_moving_average')
 , require('./test_exponentially_decaying_sample')
-, require('./test_uniform_sample')
-, require('./meter')
-, require('./histogram')
-, require('./timer')
-, require('./test_scheduled_reporter')
-, require('./test_console_reporter')
-, require('./test_csv_reporter')
-, require('./test_graphite_reporter')
 )();
