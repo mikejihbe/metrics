@@ -20,7 +20,9 @@ var EWMA = module.exports = function(alpha, interval) {
     this.tickInterval = setInterval(function(){ self.tick(); }, interval);
 
     // Don't keep the process open if this is the last thing in the event loop.
-    this.tickInterval.unref();
+    if(this.tickInterval.unref && ({}).toString.call(this.tickInterval.unref) === '[object Function]') {
+      this.tickInterval.unref();
+    }
   }
 }
 
