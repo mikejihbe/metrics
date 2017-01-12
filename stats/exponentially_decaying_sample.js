@@ -30,7 +30,7 @@ ExponentiallyDecayingSample.prototype.size = function() {
 }
 
 ExponentiallyDecayingSample.prototype.newHeap = function() {
-  return new BinaryHeap(function(obj){return obj.priority;});
+  return new BinaryHeap(function(obj){return -obj.priority;});
 }
 
 ExponentiallyDecayingSample.prototype.now = function() {
