@@ -13,8 +13,25 @@ var Timer = module.exports = function Timer() {
 }
 
 Timer.prototype.update = function(duration) {
+  // Manually adds a duration in ms to the histogram.
   this.histogram.update(duration);
   this.meter.mark();
+}
+
+Timer.prototype.time = function() {
+  // Starts the timer
+  var d = new Date();
+  this.startTime = d.getTime();
+}
+
+Timer.prototype.stop = function() {
+  // Ends and resets the timer.
+  var d = new Date();
+  var endTime =  d.getTime();
+  var timeDiff = endTime - this.startTime;
+  this.histogram.update(timeDiff);
+  this.meter.mark();
+  this.startTime = null;
 }
 
 // delegate these to histogram
