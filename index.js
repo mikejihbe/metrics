@@ -1,5 +1,6 @@
 var Metrics = require('./metrics')
-  , Reporting = require('./reporting');
+  , Reporting = require('./reporting')
+  , Stats = require('./stats');
 
 exports.Histogram = Metrics.Histogram;
 exports.Meter = Metrics.Meter;
@@ -14,5 +15,10 @@ exports.ConsoleReporter = Reporting.ConsoleReporter;
 exports.CsvReporter = Reporting.CsvReporter;
 exports.GraphiteReporter = Reporting.GraphiteReporter;
 
-exports.version = '0.1.10';
+exports.EWMA = Stats.EWMA;
+exports.ExponentiallyDecayingSample = Stats.ExponentiallyDecayingSample;
+exports.Sample = Stats.Sample;
+exports.UniformSample = Stats.UniformSample;
+
+exports.version = '0.1.12';
 

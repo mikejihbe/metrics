@@ -157,6 +157,53 @@ declare namespace metrics {
     getMetric: (eventName: string) => Metric;
     summary: () => { [namespace: string]: { [name: string]: Metric } };
   }
+
+  class EWMA {
+    alpha: number;
+    interval: number;
+    initialized: boolean;
+    currentRate: number;
+    uncounted: number;
+    tickInterval?: number;
+
+    constructor(alpha: number, interval: number);
+    update(n: number): void;
+    tick(): void;
+    rate(): number;
+    stop(): void;
+
+    static createM1EWMA(): EWMA;
+    static createM5EWMA(): EWMA;
+    static createM15EWMA(): EWMA;
+  }
+
+  class Sample {
+    values: number[];
+    count: number;
+
+    init(): void;
+    update(val: number): void;
+    clear(): void;
+    size(): number;
+    print(): void;
+    getValues(): number[];
+  }
+
+  class ExponentiallyDecayingSample extends Sample {
+    limit: number;
+    alpha: number;
+    startTime: number;
+    nextScaleTime: number;
+
+    constructor(limit: number, alpha: number);
+
+    now(): number;
+    tick(): void;
+    clear(): void;
+    update(val: number, timestamp: number);
+    weight(time: number): number;
+    rescale(): void;
+  }
 }
 
 export = metrics;
