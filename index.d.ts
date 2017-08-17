@@ -7,6 +7,7 @@ declare namespace metrics {
 
   type MeterPrintObj = {
     type: "histogram",
+
     count: number,
     m1: number,
     m5: number,
@@ -15,15 +16,17 @@ declare namespace metrics {
     unit: "seconds"
   };
 
+  type Rates = {
+    1: number;
+    5: number;
+    15: number;
+    mean: number;
+  };
   class Meter {
     type: "meter";
+
     mark: (n: number) => void;
-    rates: () => ({
-      1: number;
-      5: number;
-      15: number;
-      mean: number;
-    });
+    rates: () => Rates;
     fifteenMinuteRate: () => number;
     fiveMinuteRate: () => number;
     oneMinuteRate: () => number;
@@ -47,12 +50,12 @@ declare namespace metrics {
     percentiles: (percentiles: number[]) => ({ [percentile: number]: number });
     values: () => number[];
 
-    oneMinuteRate: () => void;
-    fiveMinuteRate: () => void;
-    fifteenMinuteRate: () => void;
-    meanRate: () => void;
+    oneMinuteRate: () => number;
+    fiveMinuteRate: () => number;
+    fifteenMinuteRate: () => number;
+    meanRate: () => number;
     tick: () => void;
-    rates: () => void;
+    rates: () => Rates;
 
     printObj: () => ({
       type: "timer",
@@ -120,7 +123,7 @@ declare namespace metrics {
 
   abstract class ScheduledReporter extends events.EventEmitter {
     constructor(registry: Report);
-    start: () => void;
+    start: (intervalInMs: number) => void;
     stop: () => void;
     getMetrics: () => Metrics;
 
