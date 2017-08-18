@@ -1,7 +1,7 @@
 {
   "name": "metrics",
   "description": "A node.js port of Coda Hale's metrics library.  In use at Yammer.",
-  "version": "0.1.12",
+  "version": "0.1.13",
   "types": "index.d.ts",
   "repository": {
     "type": "git",
