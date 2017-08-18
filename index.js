@@ -20,5 +20,4 @@ exports.ExponentiallyDecayingSample = Stats.ExponentiallyDecayingSample;
 exports.Sample = Stats.Sample;
 exports.UniformSample = Stats.UniformSample;
 
-exports.version = '0.1.12';
-
+exports.version = require('./package.json').version;
