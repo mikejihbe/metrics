@@ -203,7 +203,7 @@ declare namespace metrics {
     now(): number;
     tick(): void;
     clear(): void;
-    update(val: number, timestamp: number);
+    update(val: number, timestamp?: number);
     weight(time: number): number;
     rescale(): void;
   }
