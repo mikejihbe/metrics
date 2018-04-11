@@ -82,7 +82,7 @@ describe('GraphiteReporter', function () {
       assert.fail(false, false, err);
     });
 
-    server.listen( function() {
+    server.listen(0, "0.0.0.0", function() {
       var address = server.address();
       var report = helper.getSampleReport();
       reporter = new GraphiteReporter(report, "host1", address.address, address.port);
