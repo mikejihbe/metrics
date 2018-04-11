@@ -102,7 +102,7 @@ declare namespace metrics {
     sum: number;
 
     clear: () => void;
-    update: (value: number, timestamp: number) => void;
+    update: (value: number, timestamp?: number) => void;
     updateVariance: (value: number) => void;
 
     percentiles: (percentiles: number[]) => ({ [percentile: number]: number });
