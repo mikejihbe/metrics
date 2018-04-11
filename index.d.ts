@@ -100,6 +100,7 @@ declare namespace metrics {
     min: number;
     max: number;
     sum: number;
+    count: number;
 
     clear: () => void;
     update: (value: number, timestamp?: number) => void;
