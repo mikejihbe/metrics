@@ -6,7 +6,7 @@ declare namespace metrics {
   type Metric = Meter | Timer | Counter | Histogram;
 
   type MeterPrintObj = {
-    type: "histogram",
+    type: "meter",
 
     count: number,
     m1: number,
