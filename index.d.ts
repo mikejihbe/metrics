@@ -6,7 +6,7 @@ declare namespace metrics {
   type Metric = Meter | Timer | Counter | Histogram;
 
   type MeterPrintObj = {
-    type: "histogram",
+    type: "meter",
 
     count: number,
     m1: number,
@@ -149,7 +149,7 @@ declare namespace metrics {
   class GraphiteReporter extends ScheduledReporter {
     constructor(registry: Report);
     report: () => void;
-    write: (timestamp: number, name: string, header: string, line: string, values: any[]) => void;
+    send: (name: string, value: number, timestamp: number) => void;
     reportCounter: (counter: Counter, timestamp: number) => void;
     reportMeter: (meter: Meter, timestamp: number) => void;
     reportTimer: (timer: Timer, timestamp: number) => void;
