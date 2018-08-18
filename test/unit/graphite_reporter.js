@@ -72,6 +72,8 @@ describe('GraphiteReporter', function () {
             tsData.forEach(function (metric) {
               expect(metric[0]).to.startsWith('host1.');
             });
+            // Timestamp should contain only digits
+            expect(ts).to.match(/^\d+$/, 'timestamp should be an integer');
           });
           done();
         }, 2500);
