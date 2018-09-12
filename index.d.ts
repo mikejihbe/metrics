@@ -77,6 +77,17 @@ declare namespace metrics {
     });
   }
 
+  class Gauge {
+    type: "gauge";
+
+    constructor(valFn: () => any);
+
+    printObj: () => ({
+      type: "gauge";
+      value: any;
+    })
+  }
+
   type HistogramPrintObj = {
     type: "histogram",
 
