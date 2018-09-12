@@ -30,4 +30,21 @@ describe('Timer', function() {
       done();
     }, 1000);
   });
+
+  it('should record duration using TimerContext.', function(done) {
+    var timer = new Timer();
+    var time = timer.time();
+
+    var interval = setInterval(function() {
+      time.stop();
+    }, 100);
+
+    setTimeout(function() {
+      clearInterval(interval);
+      timer.tick();
+      expect(timer.count()).to.be.within(1, 2);
+      expect(timer.max()).to.be.within(100, 150);
+      done();
+    }, 150);
+  });
 });
