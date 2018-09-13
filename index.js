@@ -7,6 +7,7 @@ exports.Meter = Metrics.Meter;
 exports.Counter = Metrics.Counter;
 exports.Timer = Metrics.Timer;
 exports.Gauge = Metrics.Gauge;
+exports.CachedGauge = Metrics.CachedGauge;
 
 exports.Server = Reporting.Server;
 exports.Report = Reporting.Report;

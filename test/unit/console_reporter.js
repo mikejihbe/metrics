@@ -29,7 +29,7 @@ describe('ConsoleReporter', function () {
 
     // validate line by line.  This may be overkill but will detect when
     // unanticipated changes affect reported output.
-    expect(data.length).to.equal(44);
+    expect(data.length).to.equal(48);
     expect(data[0]).to.equal('Counters -----------------------------------------------------------------------');
     expect(data[1]).to.equal('basicCount');
     expect(data[2]).to.equal('             count = 5');
@@ -75,5 +75,9 @@ describe('ConsoleReporter', function () {
     expect(data[41]).to.equal('              99% <= 199.98');
     expect(data[42]).to.equal('            99.9% <= 200.00');
     expect(data[43]).to.equal('');
+    expect(data[44]).to.equal('Gauges -------------------------------------------------------------------------');
+    expect(data[45]).to.equal('myapp.Gauge');
+    expect(data[46]).to.equal('             value = 0.8');
+    expect(data[47]).to.equal('');
   });
 });

@@ -4,7 +4,7 @@ var expect = require('chai').expect
   , Gauge = require('../../metrics/gauge');
 
 describe('Gauge', function() {
-  it('should reflect function value', function() {
+  it('should call function every time value is requested.', function() {
     var i = 0;
     var gauge = new Gauge(function() { return i++; });
 

@@ -4,6 +4,8 @@ var metrics = require('../../'),
   Timer = metrics.Timer,
   Meter = metrics.Meter,
   Histogram = metrics.Histogram,
+  Gauge = metrics.Gauge,
+  CachedGauge = metrics.CachedGauge,
   util = require('util');
 
 function getSampleReport() {
@@ -19,11 +21,16 @@ function getSampleReport() {
   for (var i = 1; i <= 100; i++) {
     hist.update(i*2);
   }
+  var gauge = new CachedGauge(function () {
+    return 0.8
+  }, 10000);
+  // gauge = new Gauge(function() {return 0.8});
   var report = new Report();
   report.addMetric("basicCount", counter);
   report.addMetric("myapp.Meter", meter);
   report.addMetric("myapp.Timer", timer);
   report.addMetric("myapp.Histogram", hist);
+  report.addMetric("myapp.Gauge", gauge);
   return report;
 }
 

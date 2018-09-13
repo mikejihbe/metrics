@@ -36,7 +36,8 @@ describe('CsvReporter', function () {
     var meterFile = path.join(tmpdir, 'myapp.Meter.csv');
     var timerFile = path.join(tmpdir, 'myapp.Timer.csv');
     var histFile = path.join(tmpdir, 'myapp.Histogram.csv');
-    var files = [counterFile, meterFile, timerFile, histFile];
+    var gaugeFile = path.join(tmpdir, 'myapp.Gauge.csv');
+    var files = [counterFile, meterFile, timerFile, histFile, gaugeFile];
 
     setTimeout(function() {
       debug("Reading files %s.  Each file should have 1 header and 3 recordings.", files);
@@ -64,6 +65,11 @@ describe('CsvReporter', function () {
             expect(data[0]).to.equal('t,count,max,mean,min,stddev,p50,p75,p95,p98,p99,p999');
             data.slice(1, 4).forEach(function (line) {
               expect(line).to.match(/.*,100,200,101,2,58.02298395176403,101,151.5,191.89999999999998,197.96,199.98,200/);
+            });
+          } else if (f === gaugeFile) {
+            expect(data[0]).to.equal('t,value');
+            data.slice(1, 4).forEach(function (line) {
+              expect(line).to.match(/.*,0.8/);
             });
           } else {
             expect(data[0]).to.equal('t,count,max,mean,min,stddev,p50,p75,p95,p98,p99,p999,mean_rate,m1_rate,m5_rate,m15_rate,rate_unit,duration_unit');

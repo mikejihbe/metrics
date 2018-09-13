@@ -3,6 +3,7 @@ var Counter = require('../metrics').Counter,
   Histogram = require('../metrics').Histogram,
   Meter = require('../metrics').Meter,
   Timer = require('../metrics').Timer,
+  Gauge = require('../metrics').Gauge,
   util = require('util'),
   EventEmitter = require('events').EventEmitter;
 
@@ -54,6 +55,7 @@ ScheduledReporter.prototype.getMetrics = function() {
   var timers = [];
   var counters = [];
   var histograms = [];
+  var gauges = [];
 
   var trackedMetrics = this.registry.trackedMetrics;
   // Flatten metric name to be namespace.name is has a namespace and separate out metrics
@@ -66,20 +68,21 @@ ScheduledReporter.prototype.getMetrics = function() {
       } else {
         metric.name = name;
       }
-      var metricType = Object.getPrototypeOf(metric);
-      if(metricType === Meter.prototype) {
+      if(metric instanceof Meter) {
         meters.push(metric);
-      } else if(metricType == Timer.prototype) {
+      } else if(metric instanceof Timer) {
         timers.push(metric);
-      } else if(metricType == Counter.prototype) {
+      } else if(metric instanceof Counter) {
         counters.push(metric);
-      } else if(metricType == Histogram.prototype) {
+      } else if(metric instanceof Histogram) {
         histograms.push(metric);
+      } else if(metric instanceof Gauge) {
+        gauges.push(metric);
       }
     }
   }
 
-  return { meters: meters, timers: timers, counters: counters, histograms: histograms };
+  return { meters: meters, timers: timers, counters: counters, histograms: histograms, gauges: gauges };
 };
 
 module.exports = ScheduledReporter;
