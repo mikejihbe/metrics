@@ -4,7 +4,6 @@ var metrics = require('../../'),
   Timer = metrics.Timer,
   Meter = metrics.Meter,
   Histogram = metrics.Histogram,
-  Gauge = metrics.Gauge,
   CachedGauge = metrics.CachedGauge,
   util = require('util');
 
@@ -24,7 +23,6 @@ function getSampleReport() {
   var gauge = new CachedGauge(function () {
     return 0.8
   }, 10000);
-  // gauge = new Gauge(function() {return 0.8});
   var report = new Report();
   report.addMetric("basicCount", counter);
   report.addMetric("myapp.Meter", meter);
