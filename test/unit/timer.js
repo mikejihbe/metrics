@@ -43,7 +43,7 @@ describe('Timer', function() {
       clearInterval(interval);
       timer.tick();
       expect(timer.count()).to.be.within(1, 2);
-      expect(timer.max()).to.be.within(100, 150);
+      expect(timer.max()).to.be.within(98, 150);
       done();
     }, 150);
   });
