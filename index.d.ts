@@ -80,12 +80,17 @@ declare namespace metrics {
   class Gauge {
     type: "gauge";
 
-    constructor(valFn: () => any);
+    constructor(valueFn: () => any);
+    value: () => any
 
     printObj: () => ({
       type: "gauge";
       value: any;
     })
+  }
+
+  class CachedGauge extends Gauge {
+    constructor(valueFn: () => any, expirationInMs: number);
   }
 
   type HistogramPrintObj = {
