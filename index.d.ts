@@ -34,6 +34,10 @@ declare namespace metrics {
     printObj: () => MeterPrintObj;
   }
 
+  class TimerContext {
+    stop: () => void;
+  }
+
   class Timer {
     type: "timer";
     histogram: Histogram;
@@ -41,6 +45,7 @@ declare namespace metrics {
 
     clear: () => void;
     update: (duration: number) => void;
+    time: () => TimerContext;
 
     count: () => number;
     min: () => number;

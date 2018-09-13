@@ -2,6 +2,26 @@ var Meter = require('./meter'),
     Histogram = require('./histogram'),
     ExponentiallyDecayingSample = require('../stats/exponentially_decaying_sample');
 
+var MILLIS_IN_SEC = 1e3;
+var MILLIS_IN_NANO = 1e-6;
+
+var TimerContext = function(timer) {
+  this.timer = timer;
+  this.start = process.hrtime();
+}
+
+/**
+ * Calls [update]{@link Timer#update} on the associated timer recording
+ * the elapsed duration from when this context was created to now in
+ * milliseconds.
+ *
+ * This may be called successive times to record multiple durations.
+ */
+TimerContext.prototype.stop = function() {
+  var duration = process.hrtime(this.start);
+  this.timer.update(duration[0] * MILLIS_IN_SEC + duration[1] * MILLIS_IN_NANO);
+}
+
 /*
 *  Basically a timer tracks the rate of events and histograms the durations
 */
@@ -15,6 +35,16 @@ var Timer = module.exports = function Timer() {
 Timer.prototype.update = function(duration) {
   this.histogram.update(duration);
   this.meter.mark();
+}
+
+/**
+ * Creates a context used to record elapsed milliseconds between now and
+ * when [stop]{@link TimerContext#stop} is called.
+ *
+ * @returns {TimerContext}
+ */
+Timer.prototype.time = function() {
+  return new TimerContext(this)
 }
 
 // delegate these to histogram
