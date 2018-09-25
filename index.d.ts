@@ -3,7 +3,7 @@
 import events = require("events");
 
 declare namespace metrics {
-  type Metric = Meter | Timer | Counter | Histogram;
+  type Metric = Meter | Timer | Counter | Histogram | Gauge;
 
   type MeterPrintObj = {
     type: "meter",
