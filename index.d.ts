@@ -73,9 +73,9 @@ declare namespace metrics {
     type: "counter";
 
     clear: () => void;
-
-    inc: () => void;
-    dec: () => void;
+    inc: (val?: number) => void;
+    dec: (val?: number) => void;
+    
     printObj: () => ({
       type: "counter";
       count: number;
