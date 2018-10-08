@@ -89,6 +89,12 @@ GraphiteReporter.prototype.report = function() {
       }
     })
   }
+
+  if(metrics.gauges.length != 0) {
+    metrics.counters.forEach(function (gauge) {
+      self.reportGauge.bind(self)(gauge, timestamp);
+    })
+  }
 };
 
 GraphiteReporter.prototype.send = function(name, value, timestamp) {
@@ -153,6 +159,12 @@ GraphiteReporter.prototype.reportHistogram = function(histogram, timestamp) {
   send(util.format('%s.%s', histogram.name, 'p98'), percentiles[.98], timestamp);
   send(util.format('%s.%s', histogram.name, 'p99'), percentiles[.99], timestamp);
   send(util.format('%s.%s', histogram.name, 'p999'), percentiles[.999], timestamp);
+};
+
+GraphiteReporter.prototype.reportGauge = function(gauge, timestamp) {
+  var send = this.send.bind(this);
+
+  send(gauge.name, JSON.stringify(gauge.count), timestamp);
 };
 
 module.exports = GraphiteReporter;

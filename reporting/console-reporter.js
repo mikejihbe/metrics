@@ -54,6 +54,14 @@ ConsoleReporter.prototype.report = function() {
     });
     console.log();
   }
+
+  if(metrics.gauges.length != 0) {
+    printWithBanner('Gauges');
+    metrics.gauges.forEach(function (gauge) {
+      printGauge(gauge);
+    });
+    console.log();
+  }
 };
 
 function printWithBanner(name) {
@@ -118,6 +126,11 @@ function printHistogram(histogram) {
   console.log('              98%% <= %s%s', ff(percentiles[.98]), durationUnit);
   console.log('              99%% <= %s%s', ff(percentiles[.99]), durationUnit);
   console.log('            99.9%% <= %s%s', ff(percentiles[.999]), durationUnit);
+}
+
+function printGauge(gauge) {
+  console.log(gauge.name);
+  console.log('             value = %s', JSON.stringify(gauge.value()));
 }
 
 module.exports = ConsoleReporter;

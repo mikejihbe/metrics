@@ -44,7 +44,11 @@ CsvReporter.prototype.report = function() {
     if(histogram.min != null) {
       self.reportHistogram.bind(self)(histogram, timestamp);
     }
-  })
+  });
+
+  metrics.gauges.forEach(function(gauge) {
+    self.reportGauge.bind(self)(gauge, timestamp);
+  });
 };
 
 CsvReporter.prototype.write = function(timestamp, name, header, line, values) {
@@ -134,5 +138,10 @@ CsvReporter.prototype.reportHistogram = function(histogram, timestamp) {
       percentiles[.999]
     ]);
 };
+
+CsvReporter.prototype.reportGauge = function(gauge, timestamp) {
+  var write = this.write.bind(this);
+  write(timestamp, gauge.name, 'value', '%s', [JSON.stringify(gauge.value())]);
+}
 
 module.exports = CsvReporter;

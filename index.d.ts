@@ -3,7 +3,7 @@
 import events = require("events");
 
 declare namespace metrics {
-  type Metric = Meter | Timer | Counter | Histogram;
+  type Metric = Meter | Timer | Counter | Histogram | Gauge;
 
   type MeterPrintObj = {
     type: "meter",
@@ -80,6 +80,22 @@ declare namespace metrics {
       type: "counter";
       count: number;
     });
+  }
+
+  class Gauge {
+    type: "gauge";
+
+    constructor(valueFn: () => any);
+    value: () => any
+
+    printObj: () => ({
+      type: "gauge";
+      value: any;
+    })
+  }
+
+  class CachedGauge extends Gauge {
+    constructor(valueFn: () => any, expirationInMs: number);
   }
 
   type HistogramPrintObj = {
