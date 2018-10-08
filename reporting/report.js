@@ -36,9 +36,9 @@ Report.prototype.getMetric = function (eventName){
 
 Report.prototype.summary = function (){
   var metricsObj = {};
-  for (namespace in this.trackedMetrics) {
+  for (var namespace in this.trackedMetrics) {
     metricsObj[namespace] = {};
-    for (name in this.trackedMetrics[namespace]) {
+    for (var name in this.trackedMetrics[namespace]) {
       metricsObj[namespace][name] = this.trackedMetrics[namespace][name].printObj();
     }
   }
