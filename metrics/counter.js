@@ -2,7 +2,7 @@
 *  A simple counter object
 */
 
-/* JavaScript uses double-precision FP for all numeric types.  
+/* JavaScript uses double-precision FP for all numeric types.
  * Perhaps someday we'll have native 64-bit integers that can safely be
  * transported via JSON without additional code, but not today. */
 var MAX_COUNTER_VALUE = Math.pow(2, 32); // 4294967296
@@ -13,6 +13,7 @@ var Counter = module.exports = function Counter() {
 }
 
 Counter.prototype.inc = function(val) {
+  if (val === 0) { return }
   if (!val) { val = 1; }
   this.count += val;
   // Wrap counter if necessary.
@@ -22,6 +23,7 @@ Counter.prototype.inc = function(val) {
 }
 
 Counter.prototype.dec = function(val) {
+  if (val === 0) { return }
   if (!val) { val = 1; }
   this.count -= val;
   // Prevent counter from being decremented below zero.
