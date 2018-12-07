@@ -91,7 +91,7 @@ GraphiteReporter.prototype.report = function() {
   }
 
   if(metrics.gauges.length != 0) {
-    metrics.counters.forEach(function (gauge) {
+    metrics.gauges.forEach(function (gauge) {
       self.reportGauge.bind(self)(gauge, timestamp);
     })
   }
@@ -163,8 +163,7 @@ GraphiteReporter.prototype.reportHistogram = function(histogram, timestamp) {
 
 GraphiteReporter.prototype.reportGauge = function(gauge, timestamp) {
   var send = this.send.bind(this);
-
-  send(gauge.name, JSON.stringify(gauge.count), timestamp);
+  send(util.format('%s.%s', gauge.name, 'value'), JSON.stringify(gauge.value()), timestamp);
 };
 
 module.exports = GraphiteReporter;
