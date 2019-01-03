@@ -14,15 +14,9 @@ var ExponentiallyDecayingSample = module.exports = function ExponentiallyDecayin
 
 ExponentiallyDecayingSample.prototype = new Sample();
 
-// This is a relatively expensive operation
+// The result is not sorted in a meaningful order.
 ExponentiallyDecayingSample.prototype.getValues = function() {
-  var values = []
-    , elt
-    , heap = this.values.clone();
-  while(elt = heap.pop()) {
-    values.push(elt.val);
-  }
-  return values;
+  return this.values.getValues().map(function(v) { return v.val; });
 }
 
 ExponentiallyDecayingSample.prototype.size = function() {
