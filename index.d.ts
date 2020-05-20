@@ -179,7 +179,7 @@ declare namespace metrics {
 
   class Report {
     addMetric: (eventName: string, metric: Metric) => void;
-    getMetric: (eventName: string) => Metric;
+    getMetric: (eventName: string) => Metric | undefined;
     summary: () => { [namespace: string]: { [name: string]: Metric } };
   }
 
