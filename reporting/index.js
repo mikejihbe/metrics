@@ -4,3 +4,4 @@ exports.ScheduledReporter = require('./scheduled-reporter');
 exports.ConsoleReporter = require('./console-reporter');
 exports.CsvReporter = require('./csv-reporter');
 exports.GraphiteReporter = require('./graphite-reporter');
+exports.GraphiteReporterUdp = require('./graphite-reporter-udp');

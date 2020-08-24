@@ -177,6 +177,16 @@ declare namespace metrics {
     reportHistogram: (histogram: Histogram, timestamp: number) => void;
   }
 
+  class GraphiteReporterUdp extends ScheduledReporter {
+    constructor(registry: Report);
+    report: () => void;
+    send: (name: string, value: number, timestamp: number) => void;
+    reportCounter: (counter: Counter, timestamp: number) => void;
+    reportMeter: (meter: Meter, timestamp: number) => void;
+    reportTimer: (timer: Timer, timestamp: number) => void;
+    reportHistogram: (histogram: Histogram, timestamp: number) => void;
+  }
+
   class Report {
     addMetric: (eventName: string, metric: Metric) => void;
     getMetric: (eventName: string) => Metric;

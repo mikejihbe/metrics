@@ -16,6 +16,7 @@ exports.ScheduledReporter = Reporting.ScheduledReporter;
 exports.ConsoleReporter = Reporting.ConsoleReporter;
 exports.CsvReporter = Reporting.CsvReporter;
 exports.GraphiteReporter = Reporting.GraphiteReporter;
+exports.GraphiteReporterUdp = Reporting.GraphiteReporterUdp;
 
 exports.EWMA = Stats.EWMA;
 exports.ExponentiallyDecayingSample = Stats.ExponentiallyDecayingSample;
