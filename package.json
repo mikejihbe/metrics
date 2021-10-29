@@ -3,6 +3,7 @@
   "description": "A node.js port of Coda Hale's metrics library.  In use at Yammer.",
   "version": "0.1.21",
   "types": "index.d.ts",
+  "license": "MIT",
   "repository": {
     "type": "git",
     "url": "git://github.com/mikejihbe/metrics.git"
