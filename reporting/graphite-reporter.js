@@ -11,7 +11,7 @@ var reconnecting = false;
  * @param {Report} registry report instance whose metrics to report on.
  * @param {String} prefix A string to prefix on each metric (i.e. app.hostserver)
  * @param {String} host The ip or hostname of the target graphite server.
- * @param {String} port The port graphite is running on, defaults to 2003 if not specified.
+ * @param {Number} port The port graphite is running on, defaults to 2003 if not specified.
  * @constructor
  */
 function GraphiteReporter(registry, prefix, host, port) {
